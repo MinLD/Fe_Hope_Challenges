@@ -13,7 +13,6 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       {
-        // BẤT KỲ request nào đến /api/abc sẽ được chuyển tiếp
         source: "/apiFe/:path*",
         destination: `${URL}/:path*`,
       },

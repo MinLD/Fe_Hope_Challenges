@@ -1,5 +1,5 @@
 function page() {
-  return <div>loggin</div>;
+  return <>đâns</>;
 }
 
 export default page;

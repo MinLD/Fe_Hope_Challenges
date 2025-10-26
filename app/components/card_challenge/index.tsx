@@ -14,9 +14,10 @@ function CardChallenge({ className }: Props) {
   return (
     <>
       <div
-        className={`${className}   transform hover:scale-105 transition-all duration-300 cursor-pointer relative group rounded-2xl overflow-hidden `}
+        className={`${className}    transform hover:scale-105 transition-all duration-300 cursor-pointer relative group rounded-2xl overflow-hidden `}
       >
-        <div className=" absolute inset-0 bg-gradient-to-br from-pink-500 to-red-500 rounded-2xl opacity-20 group-hover:opacity-30 transition-opacity" />
+        {/* <div className=" absolute inset-0 bg-gradient-to-br from-pink-500 to-red-500 rounded-2xl opacity-20 group-hover:opacity-30 transition-opacity" /> */}
+
         <div className="border-white/20 bg-white/10 backdrop-blur-sm">
           <div className="aspect-video relative">
             <Image

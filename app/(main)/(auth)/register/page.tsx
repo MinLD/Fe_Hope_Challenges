@@ -1,5 +1,5 @@
 function page() {
-  return <div>about</div>;
+  return <div>register</div>;
 }
 
 export default page;

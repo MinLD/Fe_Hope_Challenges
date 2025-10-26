@@ -3,7 +3,6 @@
 import { Heart, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import Image from "next/image";
 import { useNav } from "@/app/hooks/useNav";
 import Link from "next/link";
 

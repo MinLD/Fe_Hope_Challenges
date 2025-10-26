@@ -20,6 +20,7 @@ function SearchInput({
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  
   const searchContainerRef = useRef<HTMLFormElement | null | any>(null);
 
   const router = useRouter();

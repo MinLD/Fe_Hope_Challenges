@@ -1,5 +1,8 @@
 @import "tailwindcss";
 @import "react-loading-skeleton/dist/skeleton.css";
+@import "swiper/css";
+@import "swiper/css/navigation";
+@import "swiper/css/pagination";
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -28,4 +31,16 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-geograph), Helvetica, Arial, sans-serif;
+}
+
+.swiper-pagination-bullet {
+  background-color: #a8a8a8 !important;
+  opacity: 1;
+}
+
+.swiper-pagination-bullet-active {
+  background-color: #00b14f !important;
+}
+.swiper-pagination {
+  bottom: 10px !important;
 }

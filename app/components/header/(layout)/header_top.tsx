@@ -2,7 +2,7 @@
 import { mainNavLinks } from "@/app/constants/navigation";
 import { useNav } from "@/app/hooks/useNav";
 import MyLayout from "@/app/layout/index";
-import { Coins, Heart, Menu } from "lucide-react";
+import { Leaf, Menu } from "lucide-react";
 import Link from "next/link";
 
 function HeaderTop() {
@@ -13,10 +13,10 @@ function HeaderTop() {
       <div className="flex h-14 items-center justify-between">
         <Link href="/" className="flex items-center space-x-2">
           <div className="flex items-center justify-center w-8 h-8 bg-gradient-to-br from-green-500 to-blue-600 rounded-lg">
-            <Heart className="w-5 h-5 text-white" />
+            <Leaf className="w-5 h-5 text-white" />
           </div>
           <span className="text-xl font-bold bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">
-            Hope Challenge
+            Green Challenge
           </span>
         </Link>
 

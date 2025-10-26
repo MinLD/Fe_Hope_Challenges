@@ -3,7 +3,6 @@
 import { IoIosArrowForward } from "react-icons/io";
 import Link from "next/link";
 import MyLayout from "@/app/layout/index";
-import SearchInput from "@/app/components/search_input";
 import { IoSearchSharp } from "react-icons/io5";
 function HeaderBottom() {
   return (

@@ -1,7 +1,10 @@
 import { Inter, Poppins } from "next/font/google";
 import "./globals.css";
+
 import { NavProvider } from "@/app/lib/context/nav";
 import HamburgerMenu from "@/app/components/hamsbuger_menu";
+import { AuthProvider } from "@/app/lib/context/AuthContext";
+import { Toaster } from "sonner";
 // 2. Cấu hình font
 const inter = Inter({
   subsets: ["latin"],
@@ -24,12 +27,15 @@ export default async function RootLayout({
   return (
     <>
       <html lang="vi" className={`${inter.variable} ${poppins.variable}`}>
-        <NavProvider>
-          <body>
-            {children}
-            <HamburgerMenu />
-          </body>
-        </NavProvider>
+        <AuthProvider>
+          <NavProvider>
+            <body>
+              {children}
+              <HamburgerMenu />
+              <Toaster position="top-right" closeButton />
+            </body>
+          </NavProvider>
+        </AuthProvider>
       </html>
     </>
   );

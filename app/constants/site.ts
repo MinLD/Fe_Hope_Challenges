@@ -1,5 +1,7 @@
 // constants/site.ts
 
+import { Award, HandHeart, Users } from "lucide-react";
+
 export const siteTitleFooter = [
   {
     id: 0,
@@ -20,5 +22,29 @@ export const siteTitleFooter = [
       { id: 6, href: "/", label: "Báo cáo tác động" },
       { id: 7, href: "/", label: "Giá cả" },
     ],
+  },
+];
+
+export const introduction_banner = [
+  {
+    id: 1,
+    icon: Users,
+    title: "Tham gia thử thách",
+    description:
+      "Duyệt và đăng ký tham gia các thử thách CSR do các doanh nghiệp trong khu vực của bạn tạo ra. Hãy chọn những hoạt động bạn quan tâm.",
+  },
+  {
+    id: 2,
+    icon: HandHeart,
+    title: "Tạo tác động",
+    description:
+      "Tham gia các hoạt động có ý nghĩa như dọn dẹp bãi biển, trồng cây hoặc các chương trình giáo dục cộng đồng.",
+  },
+  {
+    id: 3,
+    icon: Award,
+    title: "Kiếm phần thưởng",
+    description:
+      "Hoàn thành thử thách để nhận Xu Hy Vọng và huy hiệu. Đổi phần thưởng hoặc quyên góp cho các hoạt động bạn ủng hộ.",
   },
 ];
