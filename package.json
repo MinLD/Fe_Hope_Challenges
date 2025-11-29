@@ -39,6 +39,7 @@
     "react-loading-skeleton": "^3.5.0",
     "react-markdown": "^10.1.0",
     "react-type-animation": "^3.2.0",
+    "server-only": "^0.0.1",
     "sharp": "^0.34.3",
     "sockjs-client": "^1.6.1",
     "sonner": "^2.0.3",

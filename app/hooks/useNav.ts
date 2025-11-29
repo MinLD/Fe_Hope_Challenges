@@ -1,4 +1,4 @@
-import { NavContext } from "@/app/lib/context/nav";
+import { NavContext } from "@/app/lib/states/context/nav";
 import { useContext } from "react";
 
 export function useNav() {

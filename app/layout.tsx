@@ -1,10 +1,11 @@
 import { Inter, Poppins } from "next/font/google";
 import "./globals.css";
 
-import { NavProvider } from "@/app/lib/context/nav";
-import HamburgerMenu from "@/app/components/hamsbuger_menu";
-import { AuthProvider } from "@/app/lib/context/AuthContext";
+import { NavProvider } from "@/app/lib/states/context/nav";
+import HamburgerMenu from "@/app/(components)/components/hamsbuger_menu";
+import { AuthProvider } from "@/app/lib/states/context/AuthContext";
 import { Toaster } from "sonner";
+import { SSR_Auth } from "@/app/lib/ssrs/auth";
 // 2. Cấu hình font
 const inter = Inter({
   subsets: ["latin"],
@@ -24,10 +25,24 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { roles, userId, token, profile_user } = await SSR_Auth();
+  const initialLoginData = {
+    roles: roles || [],
+    userId: userId || "",
+    token: token || "",
+    profile_user: profile_user || undefined,
+  };
+
+  console.dir(initialLoginData, { depth: null });
+
   return (
     <>
-      <html lang="vi" className={`${inter.variable} ${poppins.variable}`}>
-        <AuthProvider>
+      <html
+        lang="vi"
+        className={`${inter.variable} ${poppins.variable}`}
+        suppressHydrationWarning={true}
+      >
+        <AuthProvider initialLogin={initialLoginData}>
           <NavProvider>
             <body>
               {children}

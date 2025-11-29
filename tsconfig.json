@@ -29,6 +29,6 @@
     "**/*.tsx", // Bao gồm tất cả file .tsx
     ".next/types/**/*.ts", // Các kiểu dữ liệu do Next.js tự tạo ra
     "globals.d.ts"
-  ],
+, "app/services/api_client.ts"  ],
   "exclude": ["node_modules"]
 }

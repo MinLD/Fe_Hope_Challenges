@@ -1,0 +1,19 @@
+import HeaderBottom from "@/app/(components)/components/header/(layout)/header_bottom";
+import HeaderTop from "@/app/(components)/components/header/(layout)/header_top";
+
+function MyHeader() {
+  return (
+    <>
+      <div className="sticky top-0 z-50 w-full  shadow-sm">
+        <div className="bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80 ">
+          <HeaderTop />
+        </div>
+        <div className="bg-gray-900/95 backdrop-blur supports-[backdrop-filter]:bg-gray-900/80 ">
+          <HeaderBottom />
+        </div>
+      </div>
+    </>
+  );
+}
+
+export default MyHeader;

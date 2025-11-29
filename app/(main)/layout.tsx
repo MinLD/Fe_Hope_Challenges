@@ -1,7 +1,7 @@
 // app/(main)/layout.tsx
 
-import MyFooter from "@/app/components/footer";
-import MyHeader from "@/app/components/header";
+import MyFooter from "@/app/(components)/components/footer";
+import MyHeader from "@/app/(components)/components/header";
 
 export default function MainLayout({
   children,
