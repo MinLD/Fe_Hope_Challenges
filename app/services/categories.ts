@@ -23,5 +23,27 @@ const Api_update_category = async (
     },
   });
 };
+const Api_delete_category = async (categoryId: string, token: string) => {
+  return axiosClient.delete(`/categories/${categoryId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+const Api_search_categories = async (
+  keyword: string,
+  page: number,
+  per_page: number
+) => {
+  return axiosClient.get(
+    `/categories/search?keyword=${keyword}&page=${page}&per_page=${per_page}`
+  );
+};
 
-export { get_all_categories, Api_create_category, Api_update_category };
+export {
+  get_all_categories,
+  Api_create_category,
+  Api_update_category,
+  Api_delete_category,
+  Api_search_categories,
+};

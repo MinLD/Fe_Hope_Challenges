@@ -51,13 +51,13 @@ function CategoriesManagement({ data_categories }: Props) {
     setLoading(true);
     try {
       const response = await fetch(
-        `/apiFe/users/search?keyword=${searchQuery}`
+        `/apiFe/categories/search?keyword=${searchQuery}&page=1&per_page=3`
       );
       if (!response.ok) {
-        throw new Error("Failed to fetch users");
+        throw new Error("Failed to fetch categories");
       }
       const newData = await response.json();
-      setData(newData.users);
+      setData(newData.data || []);
       setPagination(newData.pagination);
     } catch (error) {
       console.error("Error fetching new page data:", error);
@@ -70,7 +70,7 @@ function CategoriesManagement({ data_categories }: Props) {
     setLoading(true);
 
     try {
-      const res = await fetch(`/apiFe/users/${id}`, {
+      const res = await fetch(`/apiFe/categories/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -78,41 +78,18 @@ function CategoriesManagement({ data_categories }: Props) {
       });
       if (!res.ok) {
         console.log(res);
-        toast.error("Xóa người dùng thất bại!");
+        toast.error("Xóa danh mục thất bại!");
         return;
       }
       console.log(res);
-      toast.success("Xóa người dùng thành công!");
+      toast.success("Xóa danh mục thành công!");
       handlePageChange(pagination.current_page);
     } catch (error) {
       console.log(error);
-      toast.error("Đã có lỗi xảy ra!");
+      toast.error("Đã có lỗi xảy ra khi xóa danh mục!");
     } finally {
       setLoading(false);
       setConfirmDelete("-1");
-    }
-  };
-  const handleBanUser = async (id: string, accepted: string) => {
-    setLoading(true);
-    try {
-      const res = await fetch(`/apiFe/users/${id}`, {
-        method: "PATCH",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ is_active: accepted === "true" }),
-      });
-      if (!res.ok) {
-        toast.error("Cập nhật trạng thái thất bại!");
-        return;
-      }
-      toast.success("Cập nhật trạng thái thành công!");
-      handlePageChange(pagination.current_page);
-    } catch (error) {
-      toast.error("Đã có lỗi xảy ra!");
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -124,7 +101,7 @@ function CategoriesManagement({ data_categories }: Props) {
         : `/apiFe/categories?page=${page}&per_page=3`;
       const response = await fetch(url);
       if (!response.ok) {
-        throw new Error("Failed to fetch users");
+        throw new Error("Failed to fetch categories");
       }
       const newData = await response.json();
       console.log(newData);
@@ -281,7 +258,10 @@ function CategoriesManagement({ data_categories }: Props) {
                       {category.description || ""}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap space-x-2">
-                      <button className="bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 cursor-pointer">
+                      <button
+                        onClick={() => setConfirmDelete(category.id)}
+                        className="bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 cursor-pointer"
+                      >
                         Xóa
                       </button>
                       <button
@@ -290,6 +270,13 @@ function CategoriesManagement({ data_categories }: Props) {
                       >
                         Sửa
                       </button>
+                      {ConfirmDelete === category.id && (
+                        <ModalConfirm
+                          message="danh mục"
+                          handle={() => handleDeleteUser(category?.id || "")}
+                          setClose={() => setConfirmDelete("-1")}
+                        />
+                      )}
                       {isEdit === parseInt(category.id) && (
                         <>
                           <Modal_Show setClose={() => setIsEdit(-1)}>
