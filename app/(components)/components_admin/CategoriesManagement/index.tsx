@@ -4,7 +4,7 @@ import Empty_State from "@/app/(components)/components/empty_state";
 import AdminCreateUser from "@/app/(components)/components_admin/admin_create_user";
 import { useAuth } from "@/app/hooks/useAuth";
 import { I_data_users, Ty_User } from "@/app/types/users";
-import { Users } from "lucide-react";
+import { AlignStartVertical, Users } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
@@ -296,8 +296,8 @@ function CategoriesManagement({ data_categories }: Props) {
 
             {!isLoading && data?.length === 0 && (
               <Empty_State
-                title="người dùng"
-                icon={Users}
+                title="Không có danh mục thử thách nào"
+                icon={AlignStartVertical}
                 colSpan={titleTable.length}
               />
             )}

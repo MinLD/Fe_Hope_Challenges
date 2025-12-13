@@ -8,7 +8,7 @@ type Props = {
 function Empty_State({ icon: Icon, title, colSpan }: Props) {
   return (
     <tr>
-      <td colSpan={colSpan} className="py-16 text-center">
+      <td colSpan={colSpan} className="py-10 text-center">
         <div className="flex flex-col items-center justify-center">
           <div className="h-24 w-24 bg-gray-100 rounded-full flex items-center justify-center mb-4">
             {<Icon className="w-12 h-12 text-gray-400" />}

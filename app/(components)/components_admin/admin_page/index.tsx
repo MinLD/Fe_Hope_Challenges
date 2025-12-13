@@ -3,6 +3,7 @@
 import DashBoard from "@/app/(components)/components/dashboard";
 import CategoriesManagement from "@/app/(components)/components_admin/CategoriesManagement";
 import Challenge_Management from "@/app/(components)/components_admin/challeng_management";
+import DashboardPage from "@/app/(components)/components_admin/dash_board_page";
 import Users_Management from "@/app/(components)/components_admin/users_management";
 import { useNav } from "@/app/hooks/useNav";
 import MyLayout from "@/app/layout/index";
@@ -102,7 +103,11 @@ function AdminPage({
       case "PostNonActiveManagement":
         return <>5</>;
       default:
-        return <div>default</div>;
+        return (
+          <>
+            <DashboardPage />
+          </>
+        );
     }
   }, [isTypeGeneralDashboard, data_users.users]); // Dependencies for useCallback
 

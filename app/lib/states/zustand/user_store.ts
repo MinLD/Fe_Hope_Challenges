@@ -51,17 +51,10 @@ export const useProfileStore = create<ProfileState | any>((set) => {
     },
     refreshToken: async () => {
       try {
-        const response = await axios.post("/apiFe/auth/refreshtoken", {}, { withCredentials: true });
+        const response = await axios.post("/apiFe/auth/refreshtoken", {});
         if (response.status !== 200) {
           throw new Error("Refresh token failed");
         }
-
-        const newAccessToken = response?.data?.access_token;
-        if (newAccessToken) {
-          // Keep the access token in axios defaults so direct API calls include it
-          axios.defaults.headers.common["Authorization"] = `Bearer ${newAccessToken}`;
-        }
-
         console.log("Token refreshed");
       } catch (error: any) {
         console.error("Refresh token error:", error.message);
