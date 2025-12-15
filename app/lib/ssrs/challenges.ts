@@ -2,11 +2,16 @@ import { BeUrl } from "@/app/services/api_client";
 import { cookies } from "next/headers";
 
 export const SSR_Challenges_pending = async (page = 1, per_page = 5) => {
-  const token = (await cookies()).get("access_token")?.value;
-  if (!token) {
-    return { challenges: null, pagination: null };
-  }
   try {
+    // ✅ Next 16 Fix: Explicit await on cookies
+    const cookieStore = await cookies();
+    const token = cookieStore.get("access_token")?.value;
+    
+    if (!token) {
+      console.warn("[SSR_Challenges_pending] No auth token found");
+      return { challenges: null, pagination: null };
+    }
+    
     const response = await fetch(
       `${BeUrl}/challenges/pending?page=${page}&per_page=${per_page}`,
       {
@@ -15,11 +20,10 @@ export const SSR_Challenges_pending = async (page = 1, per_page = 5) => {
       }
     );
     const data = await response.json();
-    console.log("challe in ssr", data);
     const { challenges, pagination } = data.result.data;
     return { challenges, pagination };
   } catch (error: any) {
-    console.log("SSR_Challenges_pending: Failed to fetch challenges", error);
+    console.error("[SSR_Challenges_pending] Error:", error.message);
     return { challenges: null, pagination: null };
   }
 };

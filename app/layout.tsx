@@ -1,11 +1,21 @@
 import { Inter, Poppins } from "next/font/google";
 import "./globals.css";
+import type { Metadata } from "next";
 
 import { NavProvider } from "@/app/lib/states/context/nav";
 import HamburgerMenu from "@/app/(components)/components/hamsbuger_menu";
 import { AuthProvider } from "@/app/lib/states/context/AuthContext";
 import { Toaster } from "sonner";
-import { SSR_Auth } from "@/app/lib/ssrs/auth";
+import AuthSSRInit from "@/app/(components)/auth/AuthSSRInit";
+import { Suspense } from "react";
+
+// ✅ Next 16 Fix: Add metadata for better SEO
+export const metadata: Metadata = {
+  title: "Fe_Hope_Challenges",
+  description: "Challenge management platform - Hope challenges",
+  keywords: "challenges, hope, community",
+};
+
 // 2. Cấu hình font
 const inter = Inter({
   subsets: ["latin"],
@@ -20,21 +30,18 @@ const poppins = Poppins({
   variable: "--font-poppins", // Tạo biến CSS cho font Poppins
 });
 
+// ✅ Next 16 Fix: Better loading skeleton
+function AuthInitSkeleton() {
+  return (
+    <div className="w-full h-1 bg-gradient-to-r from-blue-200 via-blue-100 to-transparent animate-pulse" />
+  );
+}
+
 export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { roles, userId, token, profile_user } = await SSR_Auth();
-  const initialLoginData = {
-    roles: roles || [],
-    userId: userId || "",
-    token: token || "",
-    profile_user: profile_user || undefined,
-  };
-
-  console.dir(initialLoginData, { depth: null });
-
   return (
     <>
       <html
@@ -42,10 +49,18 @@ export default async function RootLayout({
         className={`${inter.variable} ${poppins.variable}`}
         suppressHydrationWarning={true}
       >
-        <AuthProvider initialLogin={initialLoginData}>
+        <AuthProvider>
           <NavProvider>
             <body>
+              {/* ✅ Next 16 Fix: Better Suspense with fallback */}
+              <Suspense fallback={<AuthInitSkeleton />}>
+                <AuthSSRInit />
+              </Suspense>
+
+              {/* ✅ Page content renders immediately, not blocked by auth */}
               {children}
+              
+              {/* ✅ Always render, independent of auth state */}
               <HamburgerMenu />
               <Toaster position="top-right" closeButton />
             </body>

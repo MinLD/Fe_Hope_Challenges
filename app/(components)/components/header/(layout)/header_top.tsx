@@ -1,15 +1,12 @@
-"use client";
+import UserAuthSection from "@/app/(components)/components/user_auth_section";
 import { mainNavLinks } from "@/app/constants/navigation";
-import { useAuth } from "@/app/hooks/useAuth";
-import { useNav } from "@/app/hooks/useNav";
+
 import MyLayout from "@/app/layout/index";
-import { Leaf, Menu } from "lucide-react";
+import { Leaf } from "lucide-react";
 import Link from "next/link";
+import { Suspense } from "react";
 
 function HeaderTop() {
-  const { openHamsburg } = useNav();
-  const { roles } = useAuth();
-
   return (
     <MyLayout>
       <div className="flex h-14 items-center justify-between">
@@ -38,31 +35,13 @@ function HeaderTop() {
           ))}
         </nav>
 
-        <div className="flex items-center space-x-4">
-          {/* <div className="hidden sm:flex items-center space-x-2 px-3 py-1 bg-yellow-50 rounded-full">
-                <Coins className="w-4 h-4 text-yellow-600" />
-                <span className="text-sm font-medium text-yellow-700">850</span>
-              </div> */}
-
-          {roles && (
-            <div className="sm:flex items-center space-x-2 hidden">
-              <Link href="/login">
-                <button className="text-gray-600 hover:text-green-600 transition-colors font-medium hover:bg-gray-100 px-3 py-1 rounded-sm ">
-                  Đăng nhập
-                </button>
-              </Link>
-              <Link href="/auth/register">
-                <button className="px-3 py-1 rounded-sm text-white bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700">
-                  Đăng ký
-                </button>
-              </Link>
-            </div>
-          )}
-
-          <div className="sm:hidden cursor-pointer" onClick={openHamsburg}>
-            <Menu />
-          </div>
-        </div>
+        <Suspense
+          fallback={
+            <div className="animate-pulse w-20 h-8 bg-gray-200 rounded"></div>
+          }
+        >
+          <UserAuthSection />
+        </Suspense>
       </div>
     </MyLayout>
   );

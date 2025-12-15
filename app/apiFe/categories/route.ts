@@ -18,9 +18,14 @@ export async function GET(request: Request) {
         { status: res.status }
       );
     }
-    return NextResponse.json(res.data.result.data, {
+    const responseData = NextResponse.json(res.data.result.data, {
       status: res.data.code,
     });
+    responseData.headers.set(
+      "Cache-Control",
+      "public, s-maxage=60, stale-while-revalidate=120"
+    );
+    return responseData;
   } catch (error) {
     console.error("Lỗi API Route:", error);
     return NextResponse.json(

@@ -2,11 +2,8 @@ import { axiosClient } from "@/app/services/api_client";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  const { id } = params;
+export async function PATCH(request: NextRequest, context: any) {
+  const { id } = context.params;
   const token = (await cookies()).get("access_token")?.value;
   if (!token) {
     return NextResponse.json(
@@ -36,8 +33,8 @@ export async function PATCH(
   }
 }
 
-export async function DELETE({ params }: { params: { id: string } }) {
-  const { id } = params;
+export async function DELETE(context: any) {
+  const { id } = context.params;
 
   // 1. Lấy token chuẩn Async
   const cookieStore = await cookies();

@@ -5,10 +5,7 @@ import {
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function PATCH(request: NextRequest, context: any) {
   const token = (await cookies()).get("access_token")?.value;
   if (!token) {
     return NextResponse.json(
@@ -17,7 +14,7 @@ export async function PATCH(
     );
   }
   const body = await request.formData();
-  const { id } = params;
+  const { id } = context.params;
   try {
     const res = await Api_update_category(id, body, token);
     return NextResponse.json(res.data, { status: res.status });
@@ -36,10 +33,7 @@ export async function PATCH(
   }
 }
 
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function DELETE(request: NextRequest, context: any) {
   const token = (await cookies()).get("access_token")?.value;
   if (!token) {
     return NextResponse.json(
@@ -48,7 +42,7 @@ export async function DELETE(
     );
   }
   try {
-    const { id } = params;
+    const { id } = context.params;
     const res = await Api_delete_category(id, token);
     return NextResponse.json(res.data, { status: res.status });
   } catch (error: any) {

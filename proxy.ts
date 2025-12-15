@@ -11,6 +11,8 @@ export async function middleware(request: NextRequest) {
 
   const sessionToken = request.cookies.get("access_token")?.value;
 
+  console.log("[middleware] pathname:", pathname, "hasToken:", !!sessionToken);
+
   let roles: string[] | null = null;
   if (sessionToken) {
     try {
@@ -23,7 +25,9 @@ export async function middleware(request: NextRequest) {
 
   // if isn't admin then return to home
   if (privatePathsAdmin.some((path) => pathname.startsWith(path))) {
+    console.log("[middleware] admin path, roles:", roles);
     if (!roles?.includes("admin")) {
+      console.log("[middleware] redirect to / (not admin)");
       return NextResponse.redirect(new URL("/", request.url));
     }
     return NextResponse.next();
@@ -32,6 +36,7 @@ export async function middleware(request: NextRequest) {
   // if was tokened then return to home
   if (authPaths.some((path) => pathname.startsWith(path))) {
     if (sessionToken) {
+      console.log("[middleware] auth path but already logged in — redirect /");
       return NextResponse.redirect(new URL("/", request.url));
     }
   }
@@ -39,6 +44,7 @@ export async function middleware(request: NextRequest) {
   // if wasn't tokened then return to login
   if (privatePaths.some((path) => pathname.startsWith(path))) {
     if (!sessionToken) {
+      console.log("[middleware] private path but no token — redirect /login");
       return NextResponse.redirect(new URL("/login", request.url));
     }
   }
@@ -46,6 +52,7 @@ export async function middleware(request: NextRequest) {
   //if admin has in roles then redirect from home to admin dashboard
   if (pathname === "/") {
     if (roles?.includes("admin")) {
+      console.log("[middleware] / visited by admin — redirect /admin");
       return NextResponse.redirect(new URL("/admin", request.url));
     }
   }
@@ -56,3 +63,7 @@ export async function middleware(request: NextRequest) {
 export const config = {
   matcher: ["/((?!api/|apiFe/|_next/static|_next/image|favicon.ico).*)"],
 };
+
+export const proxy = middleware;
+
+export default proxy;

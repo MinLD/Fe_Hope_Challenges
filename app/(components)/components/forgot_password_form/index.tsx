@@ -43,10 +43,10 @@ const CheckCircleIcon = () => (
   </svg>
 );
 // --- End Icons ---
-type props = {
+type ForgotPasswordFormProps = {
   setIsLogin: (value: string) => void;
 };
-export default function ForgotPasswordForm({ setIsLogin }: props) {
+export default function ForgotPasswordForm({ setIsLogin }: ForgotPasswordFormProps) {
   // --- State for Forgot Password ---
   const [stage, setStage] = useState<"request" | "verify" | "success">(
     "request"

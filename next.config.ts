@@ -1,12 +1,8 @@
 import type { NextConfig } from "next";
 const URL = "http://127.0.0.1:5000/api";
 const nextConfig: NextConfig = {
-  typescript: {
-    // !! WARN !!
-    // Nguy hiểm: Lệnh này sẽ bỏ qua toàn bộ lỗi TypeScript trong quá trình build.
-    ignoreBuildErrors: true,
-  },
-  output: "standalone",
+  reactCompiler: false,
+  cacheComponents: true,
 
   async rewrites() {
     return [

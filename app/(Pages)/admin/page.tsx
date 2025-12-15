@@ -5,8 +5,9 @@ import { SSR_Users } from "@/app/lib/ssrs/users";
 import { I_categories_data } from "@/app/types/categories";
 import { I_challenges_data } from "@/app/types/challenges";
 import { I_data_users } from "@/app/types/users";
+import { Suspense } from "react";
 
-async function page() {
+async function AdminContent() {
   const { users, pagination: paginationUser } = await SSR_Users(1, 4);
 
   const { challenges, pagination: paginationChallenge } =
@@ -33,12 +34,24 @@ async function page() {
   };
 
   return (
+    <AdminPage
+      data_users={data_users}
+      data_challenges_pending={challenges_pending}
+      data_categories={categories_data}
+    />
+  );
+}
+
+function AdminSkeleton() {
+  return <div className="p-4">Loading admin dashboard...</div>;
+}
+
+async function page() {
+  return (
     <div>
-      <AdminPage
-        data_users={data_users}
-        data_challenges_pending={challenges_pending}
-        data_categories={categories_data}
-      />
+      <Suspense fallback={<AdminSkeleton />}>
+        <AdminContent />
+      </Suspense>
     </div>
   );
 }
