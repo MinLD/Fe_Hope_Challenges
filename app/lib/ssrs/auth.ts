@@ -32,15 +32,19 @@ export async function SSR_Auth() {
     const response = await axios.get(`${BeUrl}/users/${decoded.sub}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
+    console.log("SSR_Auth fetched user profile:", response.data.data);
 
     return {
       roles: decoded.roles || [],
       userId: decoded.sub,
       token: token,
-      profile_user: response.data.result.data,
+      profile_user: response.data.data,
     };
   } catch (error: any) {
-    console.warn("[SSR_Auth] Authentication error - Client will handle:", error.message);
+    console.warn(
+      "[SSR_Auth] Authentication error - Client will handle:",
+      error.message
+    );
     return { roles: null, userId: null, token: null, profile_user: null };
   }
 }

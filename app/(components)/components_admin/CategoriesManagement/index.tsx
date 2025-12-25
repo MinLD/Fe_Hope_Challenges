@@ -157,11 +157,7 @@ function CategoriesManagement({ data_categories }: Props) {
   }, [data_categories]);
 
   return (
-    <div className="container mx-auto py-2 ">
-      <h1 className="text-3xl font-bold text-gray-800 mb-6 sm:text-center">
-        Quản Lý Danh Mục Thử Thách
-      </h1>
-
+    <>
       <div className="flex flex-col xl:flex-row justify-between mb-6 gap-4">
         <div className="relative  sm:w-2/3 w-4/5">
           <input
@@ -312,7 +308,7 @@ function CategoriesManagement({ data_categories }: Props) {
           onPageChange={handlePageChange}
         />
       </div>
-    </div>
+    </>
   );
 }
 

@@ -20,7 +20,7 @@ export async function PATCH(request: NextRequest, context: any) {
       },
     });
     console.log(res);
-    return NextResponse.json(res.data, { status: res.status });
+    return NextResponse.json(res.data.message, { status: res.data.code });
   } catch (error: any) {
     console.log("Error updating user:", error.response?.data || error.message);
     return NextResponse.json(
@@ -49,7 +49,7 @@ export async function DELETE(context: any) {
       headers: { Authorization: `Bearer ${token}` },
     });
 
-    return NextResponse.json(res.data, { status: res.status });
+    return NextResponse.json(res.data.message, { status: res.data.code });
   } catch (error: any) {
     // 2. Trả đúng mã lỗi từ Backend (Quan trọng cho Interceptor)
     const status = error.response?.status || 500;

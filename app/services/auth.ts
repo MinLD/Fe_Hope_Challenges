@@ -1,8 +1,8 @@
 import { axiosClient } from "@/app/services/api_client";
 
-const Api_Login = (username: string, password: string) => {
+const Api_Login = (email: string, password: string) => {
   return axiosClient.post("/auth/login", {
-    username: username,
+    email: email,
     password: password,
   });
 };

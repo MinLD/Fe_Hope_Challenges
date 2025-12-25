@@ -1,59 +1,49 @@
-import AdminPage from "@/app/(components)/components_admin/admin_page";
-import { SSR_Categories } from "@/app/lib/ssrs/categories";
-import { SSR_Challenges_pending } from "@/app/lib/ssrs/challenges";
-import { SSR_Users } from "@/app/lib/ssrs/users";
-import { I_categories_data } from "@/app/types/categories";
-import { I_challenges_data } from "@/app/types/challenges";
-import { I_data_users } from "@/app/types/users";
 import { Suspense } from "react";
+import AdminPage from "@/app/(components)/components_admin/admin_page";
+import UsersSection from "@/app/(components)/components_admin/wrappers/UsersSection";
+import ChallengesSection from "@/app/(components)/components_admin/wrappers/ChallengesSection";
+import Skeleton from "react-loading-skeleton";
+import CategoriesSection from "@/app/(components)/components_admin/wrappers/CategoriesSection";
+import DashBoardSection from "@/app/(components)/components_admin/wrappers/DashBoardSection";
 
-async function AdminContent() {
-  const { users, pagination: paginationUser } = await SSR_Users(1, 4);
+type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
 
-  const { challenges, pagination: paginationChallenge } =
-    await SSR_Challenges_pending();
+async function AdminContentResolver({
+  searchParams,
+}: {
+  searchParams: SearchParams;
+}) {
+  const { tab } = await searchParams;
+  const currentTab = tab || "Dashboard";
 
-  const { categories, pagination: paginationCategory } = await SSR_Categories(
-    1,
-    3
-  );
+  switch (currentTab) {
+    case "Users_Management":
+      return <UsersSection />;
 
-  const categories_data: I_categories_data = {
-    categories,
-    pagination: paginationCategory,
-  };
+    case "Challenges_Management":
+      return <ChallengesSection />;
+    case "Categories_Management":
+      return <CategoriesSection />;
 
-  const challenges_pending: I_challenges_data = {
-    challenges: challenges,
-    pagination: paginationChallenge,
-  };
-
-  const data_users: I_data_users = {
-    users: users,
-    pagination: paginationUser,
-  };
-
-  return (
-    <AdminPage
-      data_users={data_users}
-      data_challenges_pending={challenges_pending}
-      data_categories={categories_data}
-    />
-  );
+    case "Dashboard":
+    default:
+      return <DashBoardSection />;
+  }
 }
 
-function AdminSkeleton() {
-  return <div className="p-4">Loading admin dashboard...</div>;
-}
-
-async function page() {
+export default function Page(props: { searchParams: SearchParams }) {
   return (
-    <div>
-      <Suspense fallback={<AdminSkeleton />}>
-        <AdminContent />
+    <AdminPage>
+      <Suspense
+        fallback={
+          <div className="p-4 flex flex-col gap-4">
+            <Skeleton height={40} width={200} />
+            <Skeleton count={3} height={100} />
+          </div>
+        }
+      >
+        <AdminContentResolver searchParams={props.searchParams} />
       </Suspense>
-    </div>
+    </AdminPage>
   );
 }
-
-export default page;

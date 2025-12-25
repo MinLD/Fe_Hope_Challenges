@@ -10,7 +10,23 @@ import {
   Menu,
   SunMoon,
 } from "lucide-react";
+import { useSearchParams } from "next/navigation";
+import { Suspense } from "react"; // ✅ Import Suspense
 
+// 1️⃣ TẠO COMPONENT CON: Chuyên xử lý việc đọc URL
+// Component này sẽ "chậm" hơn phần còn lại 1 chút xíu, nhưng không chặn UI chính
+function DashboardBreadcrumb() {
+  const searchParams = useSearchParams();
+  const isTypeGeneralDashboard = searchParams.get("tab") || "Dashboard";
+
+  return (
+    <span>
+      {isTypeGeneralDashboard === "Dashboard"
+        ? "Thống kê"
+        : isTypeGeneralDashboard}
+    </span>
+  );
+}
 type Props = {
   isOpenSibar: () => void;
 };
@@ -47,7 +63,7 @@ function HeaderDashBoard({ isOpenSibar }: Props) {
       name: CircleUserRound,
     },
   ];
-  const { isTypeGeneralDashboard } = useNav();
+
   return (
     <>
       <div className="w-full h-[80px] bg-[#ffffff] py-6 px-[1vw] border-b-1 border-[#d9d9d9]">
@@ -83,11 +99,11 @@ function HeaderDashBoard({ isOpenSibar }: Props) {
         </div>
       </div>
       <div className="w-full h-[25px] bg-[#ffffff] py-5 px-[3vw] border-b-1 border-[#d9d9d9] flex items-center">
-        <p className="text-[15px] ">
-          Dashboard /{" "}
-          {isTypeGeneralDashboard === "Dashboard"
-            ? "Thống kê"
-            : isTypeGeneralDashboard}
+        <p className="text-[15px] flex gap-1">
+          Dashboard /
+          <Suspense fallback={<span>...</span>}>
+            <DashboardBreadcrumb />
+          </Suspense>
         </p>
       </div>
     </>

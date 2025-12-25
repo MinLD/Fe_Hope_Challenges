@@ -1,120 +1,74 @@
-
 "use client";
 
-import DashBoard from "@/app/(components)/components/dashboard";
-import CategoriesManagement from "@/app/(components)/components_admin/CategoriesManagement";
-import Challenge_Management from "@/app/(components)/components_admin/challeng_management";
-import DashboardPage from "@/app/(components)/components_admin/dash_board_page";
-import Users_Management from "@/app/(components)/components_admin/users_management";
-import { useNav } from "@/app/hooks/useNav";
+import HeaderDashBoard from "@/app/(components)/components/header_dashboard";
+import Sibar from "@/app/(components)/components/sibar";
+import { data_sibar_admin } from "@/app/constants/site";
+
 import MyLayout from "@/app/layout/index";
-import { I_categories_data } from "@/app/types/categories";
-import { I_challenges_data } from "@/app/types/challenges";
-import { I_data_users } from "@/app/types/users";
-import { BookImage, CheckCircleIcon, HandCoins, UserCog } from "lucide-react";
-import React, { useCallback } from "react"; // Import useCallback
+
+import React, { useState } from "react";
 
 type Props = {
-  data_users: I_data_users;
-  data_challenges_pending: I_challenges_data;
-  data_categories: I_categories_data;
+  children?: React.ReactNode;
 };
-function AdminPage({
-  data_users,
-  data_challenges_pending,
-  data_categories,
-}: Props) {
-  const { isTypeGeneralDashboard } = useNav();
-  const data = [
-    {
-      title: "Quản lý người dùng",
-      label: [
-        { id: "UsersManagement", name: "Quản lý người dùng", icon: UserCog },
-      ],
-    },
-    {
-      title: "Quản lý thử thách",
-      label: [
-        {
-          id: "Challenge_Management",
-          name: "Thử thách xanh",
-          icon: BookImage,
-        },
-        {
-          id: "PostVolunteerNonActiveManagement",
-          name: "Sự kiện",
-          icon: HandCoins,
-        },
-        {
-          id: "CategoriesManagement",
-          name: "Danh mục thử thách",
-          icon: HandCoins,
-        },
-      ],
-    },
-    {
-      title: "Quản lý Công ty",
-      label: [
-        {
-          id: "CompanyNon-ActiveManagement",
-          name: "Công ty",
-          icon: CheckCircleIcon,
-        },
-      ],
-    },
-  ];
-
-  const renderComponent = useCallback(() => {
-    switch (isTypeGeneralDashboard) {
-      case "Challenge_Management":
-        return (
-          console.log("renderComponent", data_challenges_pending),
-          (
-            <>
-              <Challenge_Management
-                data_challenges_pending={data_challenges_pending as any}
-              />
-            </>
-          )
-        );
-      case "UsersManagement":
-        return (
-          console.log("renderComponent", data_users),
-          (
-            <>
-              <Users_Management data_users={data_users} />
-            </>
-          )
-        );
-      case "CategoriesManagement":
-        return (
-          console.log("renderComponent", data_categories),
-          (
-            <>
-              <CategoriesManagement data_categories={data_categories} />
-            </>
-          )
-        );
-      case "CompanyNon-ActiveManagement":
-        return <div>3 </div>;
-      case "CompanyManagement":
-        return <div>commany</div>;
-      case "PostVolunteerNonActiveManagement":
-        return <>4</>;
-      case "PostNonActiveManagement":
-        return <>5</>;
-      default:
-        return (
-          <>
-            <DashboardPage />
-          </>
-        );
-    }
-  }, [isTypeGeneralDashboard, data_users.users]); // Dependencies for useCallback
-
+function AdminPage({ children }: Props) {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   return (
     <MyLayout>
-      <DashBoard data={data} renderComponent={renderComponent} />
+      <div className="flex h-screen overflow-x-hidden">
+        {/* Sidebar */}
+        <div
+          className={`${
+            isSidebarOpen ? "md:w-70 w-0" : "w-0"
+          }   transition-all duration-300 fixed top-0 left-0 h-screen overflow-y-auto z-20`}
+        >
+          <Sibar
+            isSidebarOpen={isSidebarOpen}
+            data={data_sibar_admin.length ? data_sibar_admin : []}
+          />
+        </div>
+
+        <div className={`md:hidden`}>
+          <div
+            className={`fixed inset-0 bg-gray-900 opacity-20 z-30 ${
+              isSidebarOpen ? "block" : "hidden"
+            }`}
+            onClick={() => setIsSidebarOpen(false)}
+          ></div>
+          <div
+            className={`fixed inset-0 z-30 transition-all duration-300  ${
+              isSidebarOpen ? "translate-x-0 w-70" : "-translate-x-full"
+            }`}
+          >
+            <Sibar
+              isSidebarOpen={isSidebarOpen}
+              data={data_sibar_admin.length ? data_sibar_admin : []}
+            />
+          </div>
+        </div>
+        {/* Nội dung chính */}
+        <div
+          className={`flex-1 flex flex-col transition-all duration-300 ${
+            isSidebarOpen ? "md:ml-70 ml-0" : "ml-0"
+          }`}
+        >
+          {/* Header: Cố định ở đầu */}
+          <div
+            className={`fixed top-0 ${
+              isSidebarOpen ? "md:left-70 left-0" : "left-0"
+            } right-0 z-10 bg-white shadow transition-all duration-300 `}
+          >
+            <HeaderDashBoard
+              isOpenSibar={() => setIsSidebarOpen(!isSidebarOpen)}
+            />
+          </div>
+
+          {/* Nội dung chính: Cuộn độc lập */}
+          <div className="pt-35 px-2  flex-1 overflow-y-auto mt-2">
+            {children}
+          </div>
+        </div>
+      </div>
     </MyLayout>
   );
 }

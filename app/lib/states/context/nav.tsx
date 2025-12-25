@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useState, ReactNode } from "react";
+import { createContext, useState, ReactNode, useEffect } from "react";
 
 interface NavState {
   isOpenMenuHamsburg: boolean;
@@ -19,6 +19,19 @@ export function NavProvider({ children }: { children: ReactNode }) {
   const closeHamsburg = () => setIsOpenMenuHamsburg(false);
   const [isTypeGeneralDashboard, setIsTypeGeneralDashboard] =
     useState("Dashboard");
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedValue = localStorage.getItem("isTypeGeneralDashboard");
+      if (storedValue) {
+        setIsTypeGeneralDashboard(storedValue);
+      }
+    }
+  }, []);
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("isTypeGeneralDashboard", isTypeGeneralDashboard);
+    }
+  }, [isTypeGeneralDashboard]);
 
   return (
     <NavContext.Provider

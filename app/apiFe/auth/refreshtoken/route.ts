@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 export async function POST() {
+  console.log("👉 Đã vào hàm POST Refresh Token");
   try {
     const cookieStore = cookies();
     const refresh_token = (await cookieStore).get("refresh_token")?.value;
@@ -16,11 +17,12 @@ export async function POST() {
 
     // 1. Gọi Backend Python để lấy token mới
     const res = await Api_Refresh_Token(refresh_token);
-
-    // Giả sử cấu trúc trả về từ Python là res.data.result.data.access_token
-    const newAccessToken = res.data?.result?.data?.access_token;
-
-    if (!newAccessToken) {
+    console.log("==========================================");
+    console.log("🚀 [SERVER LOG] Bắt đầu Refresh Token...");
+    console.log("📦 Dữ liệu từ Backend Python:", JSON.stringify(res, null, 2));
+    console.log("==========================================");
+    const { access_token } = res.data?.data;
+    if (!access_token) {
       return NextResponse.json(
         { message: "Refresh failed at Backend" },
         { status: 401 }
@@ -29,13 +31,13 @@ export async function POST() {
 
     // 2. Tạo Response trả về cho Client
     const response = NextResponse.json(
-      { message: "Refresh success", access_token: newAccessToken },
+      { message: "Refresh success", access_token: access_token },
       { status: 200 }
     );
 
     // 3. QUAN TRỌNG: Set Cookie đè lên cookie cũ
     // Client (Trình duyệt) sẽ tự động cập nhật khi nhận response này
-    response.cookies.set("access_token", newAccessToken, {
+    response.cookies.set("access_token", access_token, {
       httpOnly: true, // Bắt buộc để bảo mật
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",

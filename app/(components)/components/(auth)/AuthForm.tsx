@@ -15,7 +15,7 @@ type FormData = {
   email: string;
   password: string;
   confirmPassword?: string;
-  name?: string;
+  fullName?: string;
 };
 
 type Form = {
@@ -37,7 +37,7 @@ export default function Login() {
     {
       label: "Họ và tên đầy đủ",
       type: "text",
-      name: "name",
+      name: "fullName",
       placeholder: "Nhập tên đầy đủ của bạn",
       icon: User,
     },
@@ -66,7 +66,7 @@ export default function Login() {
 
   const filteredData =
     isLogin === "login"
-      ? data.filter((item) => item.name === "name" || item.name === "password")
+      ? data.filter((item) => item.name === "email" || item.name === "password")
       : data;
 
   const validationSchema = Yup.object({
@@ -77,8 +77,8 @@ export default function Login() {
       ? {}
       : {
           email: Yup.string().email("Email không hợp lệ").required("Bắt buộc"),
-          name: Yup.string()
-            .min(5, "username phải có ít nhất 5 ký tự")
+          fullName: Yup.string()
+            .min(5, "Họ và tên đầy đủ phải có ít nhất 5 ký tự")
             .required("Bắt buộc"),
           confirmPassword: Yup.string()
             .oneOf([Yup.ref("password")], "Mật khẩu không khớp")
@@ -90,7 +90,7 @@ export default function Login() {
     initialValues: {
       email: "",
       password: "",
-      name: "",
+      fullName: "",
       confirmPassword: "",
     },
     validationSchema,
@@ -103,14 +103,14 @@ export default function Login() {
           const res = await axios.post(
             "/apiFe/auth/login",
             {
-              username: values.name,
+              email: values.email,
               password: values.password,
             },
             {
               headers: { "Content-Type": "application/json" },
             }
           );
-          console.log(res);
+
           toast.success(res.data.message || "Đăng nhập thành công");
           window.location.href = "/";
         } catch (err: any) {
@@ -138,9 +138,9 @@ export default function Login() {
         try {
           setIsLoading(true);
 
-          const username = values.name;
+          const fullName = values.fullName?.trim().replace(/\s+/g, " ");
           const res = await Api_Register(
-            username || "",
+            fullName || "",
             values.email,
             values.password
           );
@@ -162,24 +162,6 @@ export default function Login() {
       }
     },
   });
-  const handleGoogleLogin = () => {
-    // const callbackUrl = OauthConfig.redirectUri;
-    // const authUrl = OauthConfig.authUri;
-    // const googleClientId = OauthConfig.clientId;
-    // if (!googleClientId) {
-    //   console.error(
-    //     "Google Client ID is not configured in OAuthConfig. Please check .env.local."
-    //   );
-    //   toast.error("Google login is not configured. Please contact support.");
-    //   return;
-    // }
-    // const scopes = encodeURIComponent("openid profile email");
-    // const targetUrl = `${authUrl}?redirect_uri=${encodeURIComponent(
-    //   callbackUrl
-    // )}&response_type=code&client_id=${googleClientId}&scope=${scopes}&prompt=select_account`;
-    // console.log("Redirecting to Google:", targetUrl);
-    // window.location.href = targetUrl;
-  };
 
   return (
     <div className="h-auto bg-[#e7fdee] flex justify-center py-3 px-4 sm:px-6 lg:px-8">
@@ -290,10 +272,7 @@ export default function Login() {
                 </div>
 
                 <div className="mt-6 grid grid-cols-2 gap-3">
-                  <button
-                    onClick={() => handleGoogleLogin()}
-                    className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-lg shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-                  >
+                  <button className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-lg shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
                     <svg className="w-5 h-5" viewBox="0 0 24 24">
                       <path
                         fill="currentColor"

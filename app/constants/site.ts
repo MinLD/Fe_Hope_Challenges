@@ -48,3 +48,44 @@ export const introduction_banner = [
       "Hoàn thành thử thách để nhận Xu Hy Vọng và huy hiệu. Đổi phần thưởng hoặc quyên góp cho các hoạt động bạn ủng hộ.",
   },
 ];
+
+import { BookImage, CheckCircleIcon, HandCoins, UserCog } from "lucide-react";
+
+export const data_sibar_admin = [
+  {
+    title: "Quản lý người dùng",
+    label: [
+      { id: "Users_Management", name: "Quản lý người dùng", icon: UserCog },
+    ],
+  },
+  {
+    title: "Quản lý thử thách",
+    label: [
+      {
+        id: "Challenges_Management",
+        name: "Thử thách xanh",
+        icon: BookImage,
+      },
+      {
+        id: "PostVolunteerNonActiveManagement",
+        name: "Sự kiện",
+        icon: HandCoins,
+      },
+      {
+        id: "Categories_Management",
+        name: "Danh mục thử thách",
+        icon: HandCoins,
+      },
+    ],
+  },
+  {
+    title: "Quản lý Công ty",
+    label: [
+      {
+        id: "CompanyNon-ActiveManagement",
+        name: "Công ty",
+        icon: CheckCircleIcon,
+      },
+    ],
+  },
+];

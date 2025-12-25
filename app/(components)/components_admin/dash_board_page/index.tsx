@@ -1,15 +1,11 @@
 'use client";';
 import RevenueChart from "@/app/(components)/components/revenue_chart";
 import StatCard from "@/app/(components)/components/stat_card";
+import { SSR_Users_Stats } from "@/app/lib/ssrs/users";
+import { I_User_Stats } from "@/app/types/users";
 import { Users, DollarSign, Activity, ShoppingCart } from "lucide-react";
 
-// Giả lập hàm gọi API lấy thống kê
 async function getDashboardStats() {
-  // Thực tế bạn sẽ fetch từ backend Python của bạn
-  // const res = await fetch('...', { cache: 'no-store' });
-  // return res.json();
-
-  // Dữ liệu mẫu (Mock data)
   return {
     totalUsers: 1250,
     activeUsers: 890,
@@ -26,8 +22,10 @@ async function getDashboardStats() {
     ],
   };
 }
-
-export default async function DashboardPage() {
+type props = {
+  userStats: I_User_Stats;
+};
+export default async function DashboardPage({ userStats }: props) {
   const stats = await getDashboardStats();
 
   return (
@@ -38,27 +36,15 @@ export default async function DashboardPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatCard
           title="Tổng người dùng"
-          value={stats.totalUsers}
+          value={userStats?.summary?.total || 0}
           icon={Users}
           description="+12% so với tháng trước"
         />
         <StatCard
           title="Đang hoạt động"
-          value={stats.activeUsers}
+          value={userStats?.summary?.active || 0}
           icon={Activity}
           description="Người dùng online trong 30p qua"
-        />
-        <StatCard
-          title="Doanh thu"
-          value={stats.totalRevenue}
-          icon={DollarSign}
-          description="Tổng doanh thu toàn thời gian"
-        />
-        <StatCard
-          title="Đơn chờ duyệt"
-          value={stats.pendingOrders}
-          icon={ShoppingCart}
-          description="Cần xử lý ngay"
         />
       </div>
 
@@ -66,7 +52,7 @@ export default async function DashboardPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Biểu đồ chính chiếm 2 phần */}
         <div className="lg:col-span-2">
-          <RevenueChart data={stats.chartData} />
+          <RevenueChart data={userStats?.chart_data} />
         </div>
 
         {/* Một thành phần khác bên cạnh (ví dụ: User mới nhất) */}

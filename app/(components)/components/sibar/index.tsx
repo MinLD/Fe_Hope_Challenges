@@ -1,10 +1,10 @@
 "use client";
-import { LayoutDashboard, Leaf, LogOut, LucideProps } from "lucide-react";
-import { ForwardRefExoticComponent, RefAttributes } from "react";
+import { Leaf, LogOut, LucideProps } from "lucide-react";
+import { ForwardRefExoticComponent, RefAttributes, Suspense } from "react";
 import { useRouter } from "next/navigation";
-import { useNav } from "@/app/hooks/useNav";
 import Link from "next/link";
 import axios from "axios";
+import SidebarNavList from "@/app/(components)/components/sidebar_nav_list";
 
 type Props = {
   isSidebarOpen: boolean;
@@ -22,13 +22,13 @@ type Props = {
 
 function Sibar({ isSidebarOpen, data }: Props) {
   const router = useRouter();
-  const { setIsTypeGeneralDashboard, isTypeGeneralDashboard } = useNav();
 
   const handleLogout = async () => {
     try {
       await axios.post("/apiFe/auth/logout");
       router.push("/");
       router.refresh();
+      window.location.reload();
     } catch (error) {
       console.error("Failed to logout", error);
       // Optionally, handle logout error
@@ -56,45 +56,12 @@ function Sibar({ isSidebarOpen, data }: Props) {
             </Link>
           </div>
         </div>
-        <div className="flex-1 mt-5 overflow-y-auto ">
-          <div
-            className={`flex gap-2 items-center p-3 ${
-              isTypeGeneralDashboard === "Dashboard" && "bg-[#2a303d]"
-            }  rounded px-2 -y-1 hover:cursor-pointer hover:bg-[#2a303d]`}
-            onClick={() => setIsTypeGeneralDashboard("Dashboard")}
+        <div className="flex-1 mt-5 overflow-y-auto">
+          <Suspense
+            fallback={<div className="p-4 text-gray-500">Đang tải menu...</div>}
           >
-            <LayoutDashboard /> <p>Thống kê</p>
-          </div>
-
-          <div className="flex flex-col gap-2 p-2 mt-4">
-            {data.map((i) => (
-              <div key={i.title}>
-                <div className="text-xs font-medium uppercase text-gray-400 mb-2">
-                  {i.title}
-                </div>
-
-                {i.label.map((j) => (
-                  <div
-                    onClick={() => setIsTypeGeneralDashboard(j?.id)}
-                    key={j.id}
-                    className={`gap-2 flex items-center  w-full  border-gray-600 hover:bg-[#2a303d]  rounded hover:cursor-pointer ${
-                      isTypeGeneralDashboard === j?.id && "bg-[#2a303d]"
-                    }
-                      `}
-                  >
-                    <div className="mt-2 space-y-1 ">
-                      <div className="gap-4 flex items-center justify-between w-full p-2 ">
-                        <span>
-                          <j.icon />
-                        </span>
-                        <span>{j.name}</span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ))}
-          </div>
+            <SidebarNavList data={data} />
+          </Suspense>
         </div>
         <div className="flex items-center w-full h-[50px] border-t-1 border-gray-600 px-7  ">
           <span className="text-xl font-bold  ml-auto">

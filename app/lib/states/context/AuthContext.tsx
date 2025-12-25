@@ -1,11 +1,15 @@
 "use client";
 
+import { axiosClient } from "@/app/services/api_client";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 import {
   createContext,
   useState,
   ReactNode,
   useCallback,
   useMemo,
+  useEffect,
 } from "react";
 
 export interface InitialLoginProps {
@@ -48,6 +52,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     I_profile_user | undefined
   >();
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const router = useRouter();
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!profile_user) {
+        console.log(
+          "⚠️ Client: Dữ liệu SSR trống. Thử gọi API để kích hoạt Interceptor Refresh..."
+        );
+        try {
+          const res = await axios.get("apiFe/auth/whoami");
+          const data = await res.data;
+          console.log("res", data);
+          
+          console.log("✅ Client: Refresh thành công! Cập nhật lại User.");
+          router.refresh();
+        } catch (error) {
+          console.log("❌ Client: Refresh thất bại hoặc user chưa đăng nhập.");
+          console.log("error", error);
+        }
+      }
+    };
+    fetchData();
+  }, [profile_user]);
 
   console.log("roles in contexxt", roles);
   const updateAuth = useCallback((payload: InitialLoginProps) => {

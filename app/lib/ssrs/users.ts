@@ -14,11 +14,11 @@ export async function SSR_Users(page = 1, per_page = 5) {
         next: { revalidate: 60 },
       }
     );
-    const data = await response.json();
-    const { users, pagination } = data.result.data;
+    const res = await response.json();
+    const { users, pagination } = res.data;
     return { users, pagination };
   } catch (error: any) {
-    console.error("[SSR_Users] Failed to fetch users:", error.message);
+    console.log("[SSR_Users] Failed to fetch users:", error?.message);
     return {
       users: null,
       pagination: {
@@ -27,6 +27,27 @@ export async function SSR_Users(page = 1, per_page = 5) {
         total_items: 0,
         total_pages: 0,
       },
+      error: "401"
     };
+  }
+}
+
+export async function SSR_Users_Stats() {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get("access_token")?.value;
+    const response = await fetch(`${BeUrl}/users/stats`, {
+      headers: { Authorization: `Bearer ${token}` },
+      next: { revalidate: 60 },
+    });
+    const data = await response.json();
+    const { summary, chart_data } = data.result.data;
+    return { summary, chart_data };
+  } catch (error: any) {
+    console.error(
+      "[SSR_Users_Stats] Failed to fetch user stats:",
+      error?.message
+    );
+    return { summary: null, chart_data: null };
   }
 }

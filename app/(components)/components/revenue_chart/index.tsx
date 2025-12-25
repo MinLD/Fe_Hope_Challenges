@@ -1,5 +1,6 @@
 "use client";
 
+import { I_User_Stats_ChartData } from "@/app/types/users";
 import {
   AreaChart,
   Area,
@@ -11,7 +12,7 @@ import {
 } from "recharts";
 
 interface Props {
-  data: any[];
+  data: any;
 }
 
 export default function RevenueChart({ data }: Props) {
@@ -22,7 +23,7 @@ export default function RevenueChart({ data }: Props) {
       </h3>
       <ResponsiveContainer width="100%" height="100%">
         <AreaChart
-          data={data}
+          data={data || []}
           margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
         >
           <defs>
@@ -31,7 +32,7 @@ export default function RevenueChart({ data }: Props) {
               <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
             </linearGradient>
           </defs>
-          <XAxis dataKey="name" />
+          <XAxis dataKey="month" />
           <YAxis />
           <CartesianGrid strokeDasharray="3 3" vertical={false} />
           <Tooltip />

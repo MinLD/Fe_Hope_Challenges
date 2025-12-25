@@ -15,14 +15,13 @@ type Props = {
 
 function AdminViewUser({ setClose, token, user }: Props) {
   const [formData, setFormData] = useState({
-    email: user.profile?.email ?? "",
+    email: user.email ?? "",
     fullname: user.profile?.fullname ?? "",
-    username: user.username ?? "",
     avatar: user.profile?.avatar?.secure_url ?? "",
     date_of_birth: user.profile?.date_of_birth
       ? user.profile.date_of_birth.slice(0, 10)
       : "",
-    points: user?.points || 0,
+    points: user?.wallet_balance || 0,
     role: user.roles[0]?.name || "user",
   });
   const initialData = useRef({ ...formData });
@@ -60,12 +59,6 @@ function AdminViewUser({ setClose, token, user }: Props) {
       placeholder: "Họ và tên",
       disabled: false,
     },
-    {
-      id: 3,
-      name: "username",
-      type: "text",
-      placeholder: "Tên người dùng",
-    },
 
     {
       id: 4,
@@ -77,9 +70,9 @@ function AdminViewUser({ setClose, token, user }: Props) {
 
     {
       id: 5,
-      name: "points",
+      name: "wallet_balance",
       type: "number",
-      placeholder: "Điểm của người dùng",
+      placeholder: "Time points",
       disabled: false,
     },
   ];

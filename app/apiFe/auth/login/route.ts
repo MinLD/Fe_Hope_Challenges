@@ -4,11 +4,11 @@ import { Api_Login } from "@/app/services/auth";
 
 export async function POST(request: Request) {
   try {
-    const { password, username } = await request.json();
-    const res = await Api_Login(username, password);
-    const { access_token, refresh_token } = res.data.result.data;
+    const { password, email } = await request.json();
+    const res = await Api_Login(email, password);
+    const { access_token, refresh_token } = res.data.data;
 
-    const response = NextResponse.json(res.data.result.data, {
+    const response = NextResponse.json(res.data, {
       status: res.data.code,
     });
 

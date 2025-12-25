@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
     const per_page = parseInt(searchParams.get("per_page") || "5", 10);
 
     const response = await Api_Users(token, page, per_page);
-    const { users, pagination } = response?.data?.result?.data;
+    const { users, pagination } = response?.data?.data;
 
     // ✅ Next 16 Fix: Set proper cache headers
     const responseData = NextResponse.json({ users, pagination });

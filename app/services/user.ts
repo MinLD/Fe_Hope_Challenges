@@ -8,6 +8,13 @@ const Api_Register = (username: string, email: string, password: string) => {
     password: password,
   });
 };
+const Api_Admin_States_Users = (token?: string) => {
+  return axiosClient.get("/users/stats", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
 const Api_Profile_User = (userId: string, token?: string) => {
   if (token) {
     console.log("Đang chạy Api_Profile_User từ SERVER (SSR)");
@@ -57,4 +64,5 @@ export {
   Api_Admin_User,
   Api_Search_User,
   Api_Delete_User,
+  Api_Admin_States_Users,
 };

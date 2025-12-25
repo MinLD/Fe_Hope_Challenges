@@ -26,7 +26,6 @@ function Users_Management({ data_users }: Props) {
     { id: 1, name: "Tên người dùng" },
     { id: 2, name: "Email" },
     { id: 3, name: "Vai Trò" },
-    { id: 4, name: "Trạng Thái" },
     { id: 5, name: "Hành Động" },
   ];
 
@@ -177,11 +176,7 @@ function Users_Management({ data_users }: Props) {
   }, [data_users]);
 
   return (
-    <div className="container mx-auto py-2 ">
-      <h1 className="text-3xl font-bold text-gray-800 mb-6 sm:text-center">
-        Quản Lý Người Dùng
-      </h1>
-
+    <>
       <div className="flex flex-col xl:flex-row justify-between mb-6 gap-4">
         <div className="relative  sm:w-2/3 w-4/5">
           <input
@@ -243,18 +238,18 @@ function Users_Management({ data_users }: Props) {
               : data?.map((item, k) => (
                   <tr key={item.id}>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      {item?.username || "Chưa cập nhật!"}
+                      {item?.profile.fullname || "Chưa cập nhật!"}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      {item?.profile?.email || "chưa cập nhật!"}
+                      {item?.email || "chưa cập nhật!"}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       {item?.roles[0]?.name || "chưa cập nhật!"}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    {/* <td className="px-6 py-4 whitespace-nowrap">
                       <select
                         id="status"
-                        value={item?.is_active === false ? "false" : "true"}
+                        value={item?.status === "active" ? "false" : "true"}
                         onChange={(e) => {
                           const value = e.target.value;
                           handleBanUser(item.id, value || "");
@@ -269,7 +264,7 @@ function Users_Management({ data_users }: Props) {
                         <option value="true">Hoạt động</option>
                         <option value="false">Khóa tài khoản</option>
                       </select>
-                    </td>
+                    </td> */}
                     <td className="px-6 py-4 whitespace-nowrap">
                       <button
                         className="text-blue-500 hover:text-blue-700 mr-2 cursor-pointer"
@@ -331,7 +326,7 @@ function Users_Management({ data_users }: Props) {
           onPageChange={handlePageChange}
         />
       </div>
-    </div>
+    </>
   );
 }
 
