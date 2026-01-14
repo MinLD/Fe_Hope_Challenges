@@ -15,7 +15,7 @@ export async function POST() {
     const res = await Api_Logout(access_token);
     (await cookieStore).delete("access_token");
     (await cookieStore).delete("refresh_token");
-    return NextResponse.json(res.data.result.data, { status: res.data.code });
+    return NextResponse.json(res.data, { status: res.data.code });
   } catch (error: any) {
     console.log(
       "Error in logout proxy: ",

@@ -26,7 +26,7 @@ function Users_Management({ data_users }: Props) {
     { id: 1, name: "Tên người dùng" },
     { id: 2, name: "Email" },
     { id: 3, name: "Vai Trò" },
-    { id: 5, name: "Hành Động" },
+    { id: 4, name: "Hành Động" },
   ];
 
   const [data, setData] = useState<Ty_User[]>(data_users.users || []);
@@ -85,31 +85,6 @@ function Users_Management({ data_users }: Props) {
       setConfirmDelete("-1");
     }
   };
-  const handleBanUser = async (id: string, accepted: string) => {
-    setLoading(true);
-    try {
-      const res = await fetch(`/apiFe/users/${id}`, {
-        method: "PATCH",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ is_active: accepted === "true" }),
-      });
-      if (!res.ok) {
-        toast.error("Cập nhật trạng thái thất bại!");
-        return;
-      }
-      toast.success("Cập nhật trạng thái thành công!");
-      handlePageChange(pagination.current_page);
-    } catch (error) {
-      toast.error("Đã có lỗi xảy ra!");
-    } finally {
-      setTimeout(() => {
-        setLoading(false);
-      }, 500);
-    }
-  };
 
   const handlePageChange = async (page: number) => {
     setLoading(true);
@@ -122,8 +97,9 @@ function Users_Management({ data_users }: Props) {
         throw new Error("Failed to fetch users");
       }
       const newData = await response.json();
-      setData(newData.users);
-      setPagination(newData.pagination);
+      console.log("♻️ Fetched new page data:", newData.users);
+      setData(newData?.users);
+      setPagination(newData?.pagination);
     } catch (error) {
       console.error("Error fetching new page data:", error);
     } finally {
@@ -133,25 +109,6 @@ function Users_Management({ data_users }: Props) {
     }
   };
 
-  const SkeletonRow = () => (
-    <tr>
-      <td className="px-6 py-4 whitespace-nowrap">
-        <Skeleton height={20} />
-      </td>
-      <td className="px-6 py-4 whitespace-nowrap">
-        <Skeleton height={20} />
-      </td>
-      <td className="px-6 py-4 whitespace-nowrap">
-        <Skeleton height={20} />
-      </td>
-      <td className="px-6 py-4 whitespace-nowrap">
-        <Skeleton height={35} />
-      </td>
-      <td className="px-6 py-4 whitespace-nowrap">
-        <Skeleton height={20} width={80} />
-      </td>
-    </tr>
-  );
   useEffect(() => {
     if (isFirstRender.current) {
       isFirstRender.current = false;
@@ -231,83 +188,61 @@ function Users_Management({ data_users }: Props) {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {isLoading
-              ? Array.from({ length: 4 }).map((_, index) => (
-                  <SkeletonRow key={index} />
-                ))
-              : data?.map((item, k) => (
-                  <tr key={item.id}>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {item?.profile.fullname || "Chưa cập nhật!"}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {item?.email || "chưa cập nhật!"}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {item?.roles[0]?.name || "chưa cập nhật!"}
-                    </td>
-                    {/* <td className="px-6 py-4 whitespace-nowrap">
-                      <select
-                        id="status"
-                        value={item?.status === "active" ? "false" : "true"}
-                        onChange={(e) => {
-                          const value = e.target.value;
-                          handleBanUser(item.id, value || "");
-                        }}
-                        disabled={item?.roles[0]?.name === "ADMIN"}
-                        className={`${
-                          item?.roles[0]?.name === "ADMIN"
-                            ? "cursor-not-allowed"
-                            : ""
-                        } h-[35px] pl-2 border border-[#8e8e8e] rounded-md w-full text-[#3c3c3c] text-[16px]`}
-                      >
-                        <option value="true">Hoạt động</option>
-                        <option value="false">Khóa tài khoản</option>
-                      </select>
-                    </td> */}
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <button
-                        className="text-blue-500 hover:text-blue-700 mr-2 cursor-pointer"
-                        onClick={() => {
-                          setIsEditProfile(k);
-                        }}
-                      >
-                        Xem
-                      </button>
-                      <button
-                        className={`text-red-500 hover:text-red-700 cursor-pointer ${
-                          item?.roles[0]?.name === "admin"
-                            ? "hover:cursor-not-allowed"
-                            : ""
-                        }`}
-                        onClick={() => setConfirmDelete(item?.id)}
-                        disabled={item?.roles[0]?.name === "admin"}
-                      >
-                        Xóa
-                      </button>
-                      {ConfirmDelete === item?.id && (
-                        <div>
-                          <ModalConfirm
-                            setClose={() => setConfirmDelete("-1")}
-                            handle={() => handleDeleteUser(item?.id || "")}
-                          />
-                        </div>
-                      )}
+            {data?.map((item, k) => (
+              <tr key={item.id}>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  {item?.profile?.fullname || "Chưa cập nhật!"}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  {item?.email || "chưa cập nhật!"}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  {item?.roles[0]?.name.toUpperCase() || "chưa cập nhật!"}
+                </td>
 
-                      {isEditProfile === k && (
-                        <>
-                          <Modal_Show setClose={() => setIsEditProfile(-1)}>
-                            <AdminViewUser
-                              setClose={() => setIsEditProfile(-1)}
-                              token={token || ""}
-                              user={item}
-                            />
-                          </Modal_Show>
-                        </>
-                      )}
-                    </td>
-                  </tr>
-                ))}
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <button
+                    className="text-blue-500 hover:text-blue-700 mr-2 cursor-pointer"
+                    onClick={() => {
+                      setIsEditProfile(k);
+                    }}
+                  >
+                    Xem
+                  </button>
+                  <button
+                    className={`text-red-500 hover:text-red-700 cursor-pointer ${
+                      item?.roles[0]?.name === "admin"
+                        ? "hover:cursor-not-allowed"
+                        : ""
+                    }`}
+                    onClick={() => setConfirmDelete(item?.id)}
+                    disabled={item?.roles[0]?.name === "admin"}
+                  >
+                    Xóa
+                  </button>
+                  {ConfirmDelete === item?.id && (
+                    <div>
+                      <ModalConfirm
+                        setClose={() => setConfirmDelete("-1")}
+                        handle={() => handleDeleteUser(item?.id || "")}
+                      />
+                    </div>
+                  )}
+
+                  {isEditProfile === k && (
+                    <>
+                      <Modal_Show setClose={() => setIsEditProfile(-1)}>
+                        <AdminViewUser
+                          setClose={() => setIsEditProfile(-1)}
+                          token={token || ""}
+                          user={item}
+                        />
+                      </Modal_Show>
+                    </>
+                  )}
+                </td>
+              </tr>
+            ))}
             {!isLoading && data?.length === 0 && (
               <Empty_State
                 title="người dùng"

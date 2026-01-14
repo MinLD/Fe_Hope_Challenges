@@ -16,11 +16,15 @@ export async function POST() {
     }
 
     // 1. Gọi Backend Python để lấy token mới
-    const res = await Api_Refresh_Token(refresh_token);
-    console.log("==========================================");
-    console.log("🚀 [SERVER LOG] Bắt đầu Refresh Token...");
-    console.log("📦 Dữ liệu từ Backend Python:", JSON.stringify(res, null, 2));
-    console.log("==========================================");
+    let res;
+    try {
+      res = await Api_Refresh_Token(refresh_token);
+    } catch (e) {
+      return NextResponse.json(
+        { message: "Refresh token invalid" },
+        { status: 401 }
+      );
+    }
     const { access_token } = res.data?.data;
     if (!access_token) {
       return NextResponse.json(

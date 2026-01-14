@@ -39,11 +39,25 @@ const Api_search_categories = async (
     `/categories/search?keyword=${keyword}&page=${page}&per_page=${per_page}`
   );
 };
-
+const Api_get_all_skills_in_category = async (
+  categoryId: string,
+  page: number,
+  per_page: number
+) => {
+  return axiosClient.get(
+    `/categories/${categoryId}/skills?page=${page}&per_page=${per_page}`,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+};
 export {
   get_all_categories,
   Api_create_category,
   Api_update_category,
   Api_delete_category,
   Api_search_categories,
+  Api_get_all_skills_in_category,
 };

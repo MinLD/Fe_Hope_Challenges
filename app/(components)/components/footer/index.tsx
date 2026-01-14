@@ -1,3 +1,4 @@
+import Logo from "@/app/(components)/components/logo";
 import { siteTitleFooter } from "@/app/constants/site";
 import { Facebook, Heart, Instagram, Linkedin, Twitter } from "lucide-react";
 import Link from "next/link";
@@ -9,12 +10,7 @@ function MyFooter() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="space-y-4">
-              <Link href="/" className="flex items-center space-x-2">
-                <div className="flex items-center justify-center w-8 h-8 bg-gradient-to-br from-green-500 to-blue-600 rounded-lg">
-                  <Heart className="w-5 h-5 text-white" />
-                </div>
-                <span className="text-xl font-bold">Hope Challenge</span>
-              </Link>
+              <Logo />
               <p className="text-gray-400 text-sm">
                 Kết nối doanh nghiệp và cá nhân để tạo ra sự thay đổi tích cực
                 trong cộng đồng trên toàn thế giới.
@@ -88,7 +84,7 @@ function MyFooter() {
           </div>
 
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
-            <p>&copy; 2024 Hope Challenge. Bảo lưu mọi quyền.</p>
+            <p>&copy; 2024 SkillTime. Bảo lưu mọi quyền.</p>
           </div>
         </div>
       </footer>

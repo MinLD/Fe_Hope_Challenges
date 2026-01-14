@@ -5,6 +5,7 @@ import ChallengesSection from "@/app/(components)/components_admin/wrappers/Chal
 import Skeleton from "react-loading-skeleton";
 import CategoriesSection from "@/app/(components)/components_admin/wrappers/CategoriesSection";
 import DashBoardSection from "@/app/(components)/components_admin/wrappers/DashBoardSection";
+import ManagementSkillSection from "@/app/(components)/components_admin/wrappers/ManagementSkillSection";
 
 type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
 
@@ -13,8 +14,15 @@ async function AdminContentResolver({
 }: {
   searchParams: SearchParams;
 }) {
-  const { tab } = await searchParams;
+  const { tab, categoryId, nameCategory } = await searchParams;
   const currentTab = tab || "Dashboard";
+  const category_Id = Array.isArray(categoryId)
+    ? categoryId[0]
+    : categoryId || "";
+
+  const category_Name = Array.isArray(nameCategory)
+    ? nameCategory[0]
+    : nameCategory || "";
 
   switch (currentTab) {
     case "Users_Management":
@@ -24,6 +32,13 @@ async function AdminContentResolver({
       return <ChallengesSection />;
     case "Categories_Management":
       return <CategoriesSection />;
+    case "Skills_Management":
+      return (
+        <ManagementSkillSection
+          categoryId={category_Id || ""}
+          nameCategory={category_Name || ""}
+        />
+      );
 
     case "Dashboard":
     default:

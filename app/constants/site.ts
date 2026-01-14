@@ -29,16 +29,16 @@ export const introduction_banner = [
   {
     id: 1,
     icon: Users,
-    title: "Tham gia thử thách",
+    title: "Đăng ký & Nhận Credit",
     description:
-      "Duyệt và đăng ký tham gia các thử thách CSR do các doanh nghiệp trong khu vực của bạn tạo ra. Hãy chọn những hoạt động bạn quan tâm.",
+      "Tạo tài khoản và nhận 3 Credit miễn phí để bắt đầu hành trình học tập",
   },
   {
     id: 2,
     icon: HandHeart,
     title: "Tạo tác động",
     description:
-      "Tham gia các hoạt động có ý nghĩa như dọn dẹp bãi biển, trồng cây hoặc các chương trình giáo dục cộng đồng.",
+      "Sử dụng Credit để học từ mentor hoặc chia sẻ kỹ năng để kiếm thêm Credit",
   },
   {
     id: 3,
@@ -69,7 +69,7 @@ export const data_sibar_admin = [
       {
         id: "PostVolunteerNonActiveManagement",
         name: "Sự kiện",
-        icon: HandCoins,
+        icon: HandCoins,  
       },
       {
         id: "Categories_Management",

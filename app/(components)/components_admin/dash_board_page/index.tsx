@@ -1,33 +1,13 @@
-'use client";';
+"use client";
 import RevenueChart from "@/app/(components)/components/revenue_chart";
 import StatCard from "@/app/(components)/components/stat_card";
-import { SSR_Users_Stats } from "@/app/lib/ssrs/users";
 import { I_User_Stats } from "@/app/types/users";
-import { Users, DollarSign, Activity, ShoppingCart } from "lucide-react";
+import { Users, Activity } from "lucide-react";
 
-async function getDashboardStats() {
-  return {
-    totalUsers: 1250,
-    activeUsers: 890,
-    totalRevenue: "150.000.000 đ",
-    pendingOrders: 45,
-    chartData: [
-      { name: "T1", users: 400, revenue: 2400 },
-      { name: "T2", users: 300, revenue: 1398 },
-      { name: "T3", users: 200, revenue: 9800 },
-      { name: "T4", users: 278, revenue: 3908 },
-      { name: "T5", users: 189, revenue: 4800 },
-      { name: "T6", users: 239, revenue: 3800 },
-      { name: "T7", users: 349, revenue: 4300 },
-    ],
-  };
-}
 type props = {
   userStats: I_User_Stats;
 };
-export default async function DashboardPage({ userStats }: props) {
-  const stats = await getDashboardStats();
-
+export default function DashboardPage({ userStats }: props) {
   return (
     <div className="p-6 space-y-6 bg-gray-50 min-h-screen">
       <h1 className="text-2xl font-bold text-gray-800">Tổng quan hệ thống</h1>

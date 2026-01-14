@@ -1,7 +1,6 @@
-import { Inter, Poppins } from "next/font/google";
+import { Geist, Pacifico } from "next/font/google";
 import "./globals.css";
 import type { Metadata } from "next";
-
 import { NavProvider } from "@/app/lib/states/context/nav";
 import HamburgerMenu from "@/app/(components)/components/hamsbuger_menu";
 import { AuthProvider } from "@/app/lib/states/context/AuthContext";
@@ -9,28 +8,24 @@ import { Toaster } from "sonner";
 import AuthSSRInit from "@/app/(components)/auth/AuthSSRInit";
 import { Suspense } from "react";
 
-// ✅ Next 16 Fix: Add metadata for better SEO
 export const metadata: Metadata = {
-  title: "Fe_Hope_Challenges",
-  description: "Challenge management platform - Hope challenges",
+  title: "Skill Time",
+  description: "management platform - Skill Time",
   keywords: "challenges, hope, community",
 };
-
-// 2. Cấu hình font
-const inter = Inter({
+// 1. Cấu hình Geist (Font chính)
+const geistSans = Geist({
+  variable: "--font-geist-sans", // Tên biến phải khớp với bên CSS
   subsets: ["latin"],
-  display: "swap",
-  variable: "--font-inter", // Tạo biến CSS cho font Inter
 });
 
-const poppins = Poppins({
+// 2. Cấu hình Pacifico (Font Logo)
+const pacifico = Pacifico({
+  variable: "--font-pacifico", // Tên biến phải khớp với bên CSS
+  weight: "400",
   subsets: ["latin"],
-  weight: ["600", "700"],
-  display: "swap",
-  variable: "--font-poppins", // Tạo biến CSS cho font Poppins
 });
 
-// ✅ Next 16 Fix: Better loading skeleton
 function AuthInitSkeleton() {
   return (
     <div className="w-full h-1 bg-gradient-to-r from-blue-200 via-blue-100 to-transparent animate-pulse" />
@@ -44,28 +39,23 @@ export default async function RootLayout({
 }>) {
   return (
     <>
-      <html
-        lang="vi"
-        className={`${inter.variable} ${poppins.variable}`}
-        suppressHydrationWarning={true}
-      >
-        <AuthProvider>
-          <NavProvider>
-            <body>
-              {/* ✅ Next 16 Fix: Better Suspense with fallback */}
+      <html lang="vi" suppressHydrationWarning={true}>
+        <body
+          className={`${geistSans.variable} ${pacifico.variable} antialiased bg-[#0f172a] text-white`}
+        >
+          <AuthProvider>
+            <NavProvider>
               <Suspense fallback={<AuthInitSkeleton />}>
                 <AuthSSRInit />
               </Suspense>
 
-              {/* ✅ Page content renders immediately, not blocked by auth */}
               {children}
-              
-              {/* ✅ Always render, independent of auth state */}
+
               <HamburgerMenu />
               <Toaster position="top-right" closeButton />
-            </body>
-          </NavProvider>
-        </AuthProvider>
+            </NavProvider>
+          </AuthProvider>
+        </body>
       </html>
     </>
   );

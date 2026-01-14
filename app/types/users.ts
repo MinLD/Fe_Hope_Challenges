@@ -36,12 +36,11 @@ export interface DecodedToken {
 }
 
 export interface I_FormUser {
-  username: string;
   email: string;
   password: string;
   role: string;
   fullname: string;
-  points?: number;
+  wallet_balance?: number;
 }
 
 export interface I_data_users {

@@ -1,6 +1,15 @@
 "use client";
-import { ArrowRight, Award, HandHeart, Users } from "lucide-react";
-import banner from "../../../../public/img/banner6.png";
+import {
+  ArrowRight,
+  Award,
+  GraduationCap,
+  HandHeart,
+  MonitorPlay,
+  SquarePlay,
+  UserPlus,
+  Users,
+} from "lucide-react";
+import banner from "../../../../public/img/banner7.jpg";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { TypeAnimation } from "react-type-animation";
@@ -13,6 +22,9 @@ import MyLayout from "@/app/layout/index";
 import { introduction_banner } from "@/app/constants/site";
 import CardChallenge from "@/app/(components)/components/card_challenge";
 import MySlider from "@/app/(components)/components/my_slide";
+import QuickSearchCard from "@/app/(components)/components/quick_search_card";
+import WhyChooseSection from "@/app/(components)/components/why_choose_section";
+import { fadeInUp, staggerContainer } from "@/app/lib/Animation";
 function Banner() {
   const images = [bn1, bn2, bn3, bn4, bn1, bn2, bn3, bn4];
   const itemVariants = {
@@ -29,10 +41,9 @@ function Banner() {
 
   return (
     <>
-      {" "}
-      <section className="relative h-auto bg-gradient-to-br from-slate-900 via-blue-900 to-green-900 text-white overflow-hidden">
+      <section className="relative h-auto bg-black  text-white overflow-hidden">
         <div
-          className="absolute inset-0 opacity-30"
+          className="absolute inset-0 opacity-20"
           style={{
             backgroundImage: `url(${banner.src})`,
             backgroundSize: "cover",
@@ -51,9 +62,9 @@ function Banner() {
                 viewport={{ once: true, amount: 0.5 }}
                 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-5xl font-bold mb-4 sm:mb-6 tracking-tight leading-tight"
               >
-                Biến đổi cuộc sống thông qua
-                <span className="bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent block mt-2">
-                  Hành động có ý nghĩa
+                Chia sẻ kỹ năng
+                <span className="bg-gradient-to-r from-blue-500 to-blue-500 bg-clip-text text-transparent block mt-2">
+                  kiếm Credit
                 </span>
               </motion.h1>
               <motion.div
@@ -64,7 +75,7 @@ function Banner() {
               >
                 <TypeAnimation
                   sequence={[
-                    "Tham gia cùng hàng ngàn người tiên phong trong các thử thách trách nhiệm xã hội của doanh nghiệp. Tạo ra tác động thực sự, nhận phần thưởng và xây dựng một tương lai tốt đẹp hơn cho cộng đồng của bạn.",
+                    "Nền tảng P2P đầu tiên tại Việt Nam sử dụng Time-Credit thay vì tiền mặt. Dạy những gì bạn giỏi, học những gì bạn cần - hoàn toàn trực tuyến và an toàn.",
                     1000, // Chờ 1 giây sau khi gõ xong
                   ]}
                   wrapper="p" // Bọc trong thẻ <p>
@@ -86,10 +97,10 @@ function Banner() {
                   <motion.button
                     whileHover={{ scale: 1.05, y: -2 }}
                     whileTap={{ scale: 0.95 }}
-                    className="cursor-pointer rounded-sm flex items-center justify-center w-full sm:w-auto bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white shadow-xl shadow-green-500/30 px-6 sm:px-8 py-3 sm:py-6 text-base sm:text-lg font-semibold"
+                    className="cursor-pointer rounded-sm flex items-center justify-center w-full sm:w-auto bg-blue-600 hover:from-gray-600 hover:to-blue-700 text-white shadow-xl shadow-blue-500/30 px-6 sm:px-8 py-3 sm:py-6 text-base sm:text-lg font-semibold"
                   >
-                    Khám phá những thách thức
-                    <ArrowRight className="ml-2 w-5 h-5" />
+                    <span className="mr-2">Bắt đầu học ngay</span>{" "}
+                    <SquarePlay />
                   </motion.button>
                 </Link>
 
@@ -99,7 +110,8 @@ function Banner() {
                     whileTap={{ scale: 0.95 }}
                     className="cursor-pointer rounded-sm flex items-center justify-center w-full sm:w-auto bg-white/10 backdrop-blur-sm border-2 border-white/30 text-white hover:bg-white/20 px-6 sm:px-8 py-3 sm:py-6 text-base sm:text-lg font-semibold"
                   >
-                    Đăng ký miễn phí
+                    <span className="mr-2">Trở thành Mentor</span>{" "}
+                    <GraduationCap />
                   </motion.button>
                 </Link>
               </motion.div>
@@ -133,17 +145,8 @@ function Banner() {
               whileInView="visible"
               viewport={{ once: true, amount: 0.5 }}
             >
-              <div className="hidden lg:block">
-                <div className="grid grid-cols-2 gap-4 ">
-                  <div className="space-y-4">
-                    <CardChallenge />
-                    <CardChallenge />
-                  </div>
-                  <div className="space-y-4 mt-8">
-                    <CardChallenge />
-                    <CardChallenge />
-                  </div>
-                </div>
+              <div className="hidden md:flex items-center justify-center">
+                <QuickSearchCard />
               </div>
             </motion.div>
           </div>
@@ -152,15 +155,43 @@ function Banner() {
       {/* ---------------------- */}
       <MyLayout>
         <div>
+          <motion.div
+            variants={itemVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.5 }}
+          >
+            <div className="md:hidden mt-5">
+              <QuickSearchCard />
+            </div>
+          </motion.div>
+
           <div className="text-center mb-16 mt-15 sm:px-25">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Hope Challenges hoạt động như thế nào
-            </h2>
-            <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto px-4 sm:px-0">
-              Các bước đơn giản để bắt đầu tạo nên sự khác biệt trong cộng đồng
-              của bạn
-            </p>
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
+              variants={fadeInUp}
+              className="text-gray-600 text-lg"
+            >
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                Cách thức hoạt động
+              </h2>
+            </motion.div>
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeInUp}
+              className="text-gray-600 text-lg"
+            >
+              <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto px-2 sm:px-0">
+                Hệ thống Time-Credit độc đáo giúp bạn trao đổi kỹ năng một cách
+                công bằng và minh bạch
+              </p>
+            </motion.div>
           </div>
+
           <MySlider
             swiperOptions={{ slidesPerView: 1, navigation: false }}
             className="md:hidden cursor-pointer"
@@ -168,28 +199,28 @@ function Banner() {
             <SwiperSlide>
               <div className="text-center">
                 <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <Users className="w-8 h-8 text-white" />
+                  <UserPlus className="w-8 h-8 text-white" />
                 </div>
                 <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3">
-                  1. Join Challenges
+                  1. Đăng ký & Nhận Credit
                 </h3>
                 <p className="text-sm sm:text-base text-gray-600 leading-relaxed px-4 sm:px-0">
-                  Browse and sign up for CSR challenges created by businesses in
-                  your area. Choose causes you care about.
+                  Tạo tài khoản và nhận 3 Credit miễn phí để bắt đầu hành trình
+                  học tập
                 </p>
               </div>
             </SwiperSlide>
             <SwiperSlide>
               <div className="text-center">
                 <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <HandHeart className="w-8 h-8 text-white" />
+                  <MonitorPlay className="w-8 h-8 text-white" />
                 </div>
                 <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3">
-                  2. Make Impact
+                  2. Học hoặc Dạy
                 </h3>
                 <p className="text-sm sm:text-base text-gray-600 leading-relaxed px-4 sm:px-0">
-                  Participate in meaningful activities like beach cleanups, tree
-                  planting, or community education programs.
+                  Sử dụng Credit để học từ mentor hoặc chia sẻ kỹ năng để kiếm
+                  thêm Credit
                 </p>
               </div>
             </SwiperSlide>
@@ -199,37 +230,83 @@ function Banner() {
                   <Award className="w-8 h-8 text-white" />
                 </div>
                 <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3">
-                  3. Earn Rewards
+                  3. Học trực tuyến
                 </h3>
                 <p className="text-sm sm:text-base text-gray-600 leading-relaxed px-4 sm:px-0">
-                  Complete challenges to earn Hope Coins and badges. Redeem
-                  rewards or donate to causes you support.
+                  Tham gia phòng học ảo với video call, whiteboard và chia sẻ
+                  màn hình
                 </p>
               </div>
             </SwiperSlide>
           </MySlider>
-          <div className="md:grid grid-cols-3 hidden ">
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+            className="md:grid grid-cols-3 hidden gap-8" // Thêm gap-8 cho thoáng
+          >
             {introduction_banner &&
               introduction_banner.map((item) => {
                 const Icon = item.icon;
                 return (
-                  <div className={`text-center  `} key={item.id}>
-                    <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                      <Icon className={`w-8 h-8 text-white  `} />
-                    </div>
-                    <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3">
+                  <motion.div
+                    key={item.id}
+                    variants={fadeInUp} // Kế thừa hiệu ứng trồi lên
+                    className="text-center group" // Thêm class group để hover
+                  >
+                    {/* Icon Container: Thêm hiệu ứng Scale khi hover */}
+                    <motion.div
+                      whileHover={{ scale: 1.1, rotate: 5 }} // Phóng to và xoay nhẹ
+                      transition={{ type: "spring", stiffness: 300 }}
+                      className="w-20 h-20 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg shadow-green-500/20"
+                    >
+                      <Icon className="w-9 h-9 text-white" />
+                    </motion.div>
+
+                    <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 group-hover:text-green-600 transition-colors">
                       {item.id}. {item.title}
                     </h3>
                     <p className="text-sm sm:text-base text-gray-600 leading-relaxed px-4 sm:px-0">
                       {item.description}
                     </p>
-                  </div>
+                  </motion.div>
                 );
               })}
-          </div>
+          </motion.div>
+        </div>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95, y: 50 }}
+          whileInView={{ opacity: 1, scale: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.8, type: "spring" }}
+        >
+          <WhyChooseSection />
+        </motion.div>
+        <div className="mt-16">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={staggerContainer}
+          >
+            <motion.h2
+              variants={fadeInUp}
+              className="text-2xl font-bold text-gray-900 md:text-3xl lg:text-4xl"
+            >
+              Kỹ năng phổ biến
+            </motion.h2>
+
+            <motion.p
+              variants={fadeInUp}
+              className="mt-2 text-sm text-gray-500 md:text-base mb-8"
+            >
+              Khám phá các kỹ năng được nhiều người dùng quan tâm và trao đổi
+            </motion.p>
+          </motion.div>
           <MySlider
             swiperOptions={{ autoplay: { delay: 30000 }, navigation: false }}
-            className="cursor-pointer lg:hidden"
+            className="cursor-pointer "
           >
             {images.map((image, index) => (
               <SwiperSlide key={index}>

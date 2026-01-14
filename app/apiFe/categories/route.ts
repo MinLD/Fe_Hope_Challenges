@@ -18,9 +18,10 @@ export async function GET(request: Request) {
         { status: res.status }
       );
     }
-    const responseData = NextResponse.json(res.data.result.data, {
+    const responseData = NextResponse.json(res.data.data, {
       status: res.data.code,
     });
+
     responseData.headers.set(
       "Cache-Control",
       "public, s-maxage=60, stale-while-revalidate=120"

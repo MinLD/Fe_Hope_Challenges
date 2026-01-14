@@ -16,10 +16,11 @@ export async function GET(request: NextRequest) {
     }
 
     const response = await Api_search_categories(kw, page, per_page);
+    console.log("🔍 Search Categories Response:", response);
 
-    const { data, pagination } = response?.data?.result?.data || {};
+    const { categories, pagination } = response?.data.data || {};
 
-    return NextResponse.json({ data, pagination });
+    return NextResponse.json({ categories, pagination });
   } catch (error: any) {
     console.error("Error searching categories:", error);
     return NextResponse.json(

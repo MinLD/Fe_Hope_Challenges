@@ -1,3 +1,4 @@
+"use client";
 import { Eye, EyeClosed, X } from "lucide-react";
 import { startTransition, useState } from "react";
 import { toast } from "sonner";
@@ -15,10 +16,9 @@ function AdminCreateUser({ setClose, token }: Props) {
   const [formData, setFormData] = useState({
     email: "",
     fullname: "",
-    username: "",
     password: "",
     role: "USER",
-    points: 0,
+    wallet_balance: 0,
   });
   const inputs = [
     {
@@ -35,12 +35,7 @@ function AdminCreateUser({ setClose, token }: Props) {
       placeholder: "Họ và tên",
       disabled: false,
     },
-    {
-      id: 3,
-      name: "username",
-      type: "text",
-      placeholder: "Tên người dùng",
-    },
+
     {
       id: 4,
       name: "password",
@@ -50,7 +45,7 @@ function AdminCreateUser({ setClose, token }: Props) {
     },
     {
       id: 5,
-      name: "points",
+      name: "wallet_balance",
       type: "number",
       placeholder: "Điểm của người dùng",
       disabled: false,
@@ -92,7 +87,7 @@ function AdminCreateUser({ setClose, token }: Props) {
       startTransition(() => router.refresh());
     } catch (error: any) {
       console.log(error);
-      toast.error(error.response.data.response.message);
+      toast.error(error.response.data.message || "Đã có lỗi xảy ra!");
     } finally {
       setLoading(false);
       setClose();

@@ -6,7 +6,6 @@ import { BeUrl } from "@/app/services/api_client";
 
 export async function SSR_Auth() {
   try {
-    // ✅ Next 16 Fix: Explicit await + better error handling
     const cookieStore = await cookies();
     const token = cookieStore.get("access_token")?.value;
 
@@ -14,7 +13,6 @@ export async function SSR_Auth() {
       return { roles: null, userId: null, token: null, profile_user: null };
     }
 
-    // ✅ Next 16 Fix: Proper error handling for token decode
     let decoded: any;
     try {
       decoded = jwtDecode(token);
@@ -23,7 +21,6 @@ export async function SSR_Auth() {
       return { roles: null, userId: null, token: null, profile_user: null };
     }
 
-    // ✅ Next 16 Fix: Validate token structure
     if (!decoded?.sub) {
       console.warn("[SSR_Auth] Invalid token structure: missing 'sub'");
       return { roles: null, userId: null, token: null, profile_user: null };

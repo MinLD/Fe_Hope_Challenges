@@ -21,6 +21,8 @@ import Image from "next/image";
 import AdminCreateCategories from "@/app/(components)/components_admin/admin_create_categories";
 import Modal_Show from "@/app/(components)/components/modal_show";
 import AdminUpdateCategories from "@/app/(components)/components_admin/admin_update_categories";
+import AdminDetailsCategories from "@/app/(components)/components_admin/admin_details_categories";
+import Link from "next/link";
 
 type Props = {
   data_categories: I_categories_data;
@@ -30,8 +32,9 @@ function CategoriesManagement({ data_categories }: Props) {
   const titleTable = [
     { id: 1, name: "Ảnh danh mục" },
     { id: 2, name: "Tên danh mục" },
-    { id: 3, name: "Mô tả danh mục" },
-    { id: 4, name: "Hành Động" },
+    { id: 3, name: "Slug danh mục" },
+    { id: 4, name: "Mô tả danh mục" },
+    { id: 5, name: "Hành Động" },
   ];
 
   const [data, setData] = useState<I_category[]>(
@@ -43,6 +46,7 @@ function CategoriesManagement({ data_categories }: Props) {
   );
   const [isEdit, setIsEdit] = useState<number>(-1);
   const [ConfirmDelete, setConfirmDelete] = useState<string>("");
+  const [isDetails, setIsDetails] = useState<number>(-1);
   const [isAdd, setAdd] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const isFirstRender = useRef(true);
@@ -57,7 +61,8 @@ function CategoriesManagement({ data_categories }: Props) {
         throw new Error("Failed to fetch categories");
       }
       const newData = await response.json();
-      setData(newData.data || []);
+      console.log(newData);
+      setData(newData.categories || []);
       setPagination(newData.pagination);
     } catch (error) {
       console.error("Error fetching new page data:", error);
@@ -100,13 +105,14 @@ function CategoriesManagement({ data_categories }: Props) {
         ? `/apiFe/categories/search?keyword=${searchQuery}&page=${page}&per_page=3`
         : `/apiFe/categories?page=${page}&per_page=3`;
       const response = await fetch(url);
+      console.log("Fetching page:", url);
       if (!response.ok) {
         throw new Error("Failed to fetch categories");
       }
-      const newData = await response.json();
-      console.log(newData);
-      setData(newData.data || []);
-      setPagination(newData.pagination);
+      const { categories, pagination } = await response.json();
+      console.log("newData", { categories, pagination });
+      setData(categories || []);
+      setPagination(pagination);
     } catch (error) {
       console.error("Error fetching new page data:", error);
     } finally {
@@ -116,23 +122,6 @@ function CategoriesManagement({ data_categories }: Props) {
     }
   };
 
-  const SkeletonRow = () => (
-    <tr>
-      <td className="px-6 py-4 whitespace-nowrap">
-        <Skeleton height={50} width={50} />
-      </td>
-      <td className="px-6 py-4 whitespace-nowrap">
-        <Skeleton height={20} width={80} />
-      </td>
-      <td className="px-6 py-4 whitespace-nowrap">
-        <Skeleton height={20} width={80} />
-      </td>
-
-      <td className="px-6 py-4 whitespace-nowrap">
-        <Skeleton height={20} width={80} />
-      </td>
-    </tr>
-  );
   useEffect(() => {
     if (isFirstRender.current) {
       isFirstRender.current = false;
@@ -185,7 +174,7 @@ function CategoriesManagement({ data_categories }: Props) {
           className="w-3/4 sm:w-2/5  bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 cursor-pointer"
           onClick={() => setAdd(true)}
         >
-          Thêm thử thách
+          Thêm danh mục
         </button>
         {isAdd && (
           <div
@@ -212,7 +201,7 @@ function CategoriesManagement({ data_categories }: Props) {
               {titleTable.map((title) => (
                 <th
                   key={title.id}
-                  className="px-3 py-3 border-b border-gray-200 bg-gray-50"
+                  className="px-3 py-3 border-b border-gray-200 bg-gray-50 whitespace-nowrap"
                 >
                   {title.name}
                 </th>
@@ -220,75 +209,74 @@ function CategoriesManagement({ data_categories }: Props) {
             </tr>
           </thead>
           <tbody className="divide-gray-200 divide-y">
-            {isLoading ? (
-              <>
-                {Array.from({ length: data.length || 3 }).map((_, index) => (
-                  <SkeletonRow key={index} />
-                ))}
-              </>
-            ) : (
-              <>
-                {data?.map((category) => (
-                  <tr key={category.id}>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {category.image?.secure_url ? (
-                        <Image
-                          width={100}
-                          height={100}
-                          src={category.image.secure_url}
-                          alt={category.name}
-                          className="w-14 h-14 object-cover rounded-md"
-                        />
-                      ) : (
-                        <div className="w-14 h-14 bg-gray-200 rounded-md flex items-center justify-center">
-                          <span className="text-xs text-gray-500">
-                            No Image
-                          </span>
-                        </div>
-                      )}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {category.name || ""}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {category.description || ""}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap space-x-2">
-                      <button
-                        onClick={() => setConfirmDelete(category.id)}
-                        className="bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 cursor-pointer"
-                      >
-                        Xóa
-                      </button>
-                      <button
-                        onClick={() => setIsEdit(parseInt(category.id))}
-                        className="bg-green-500 text-white px-3 py-1 rounded-lg hover:bg-green-600 cursor-pointer"
-                      >
-                        Sửa
-                      </button>
-                      {ConfirmDelete === category.id && (
-                        <ModalConfirm
-                          message="danh mục"
-                          handle={() => handleDeleteUser(category?.id || "")}
-                          setClose={() => setConfirmDelete("-1")}
-                        />
-                      )}
-                      {isEdit === parseInt(category.id) && (
-                        <>
-                          <Modal_Show setClose={() => setIsEdit(-1)}>
-                            <AdminUpdateCategories
-                              category={category}
-                              setClose={() => setIsEdit(-1)}
-                              token={token || ""}
-                            />
-                          </Modal_Show>
-                        </>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </>
-            )}
+            <>
+              {data?.map((category) => (
+                <tr key={category.id}>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {category.avatar?.secure_url ? (
+                      <Image
+                        width={100}
+                        height={100}
+                        src={category.avatar.secure_url}
+                        alt={category.name}
+                        className="w-14 h-14 object-cover rounded-md"
+                      />
+                    ) : (
+                      <div className="w-14 h-14 bg-gray-200 rounded-md flex items-center justify-center">
+                        <span className="text-xs text-gray-500">No Image</span>
+                      </div>
+                    )}
+                  </td>
+                  <td className="px-6 py-4 max-w-[200px] whitespace-normal break-words">
+                    {category.name || ""}
+                  </td>
+                  <td className="px-6 py-4 max-w-[200px] whitespace-normal break-words">
+                    {category.slug || ""}
+                  </td>
+                  <td className="px-6 py-4 max-w-[200px] whitespace-normal break-words">
+                    {category.description || ""}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap space-x-2">
+                    <Link
+                      href={`/admin?tab=Skills_Management&categoryId=${category.id}&nameCategory=${category.name}`}
+                      className="bg-blue-500 text-white px-3 py-1.5 rounded-lg hover:bg-blue-600 cursor-pointer inline-block text-sm"
+                    >
+                      Chi tiết
+                    </Link>
+                    <button
+                      onClick={() => setConfirmDelete(category.id)}
+                      className="bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 cursor-pointer"
+                    >
+                      Xóa
+                    </button>
+                    <button
+                      onClick={() => setIsEdit(parseInt(category.id))}
+                      className="bg-green-500 text-white px-3 py-1 rounded-lg hover:bg-green-600 cursor-pointer"
+                    >
+                      Sửa
+                    </button>
+                    {ConfirmDelete === category.id && (
+                      <ModalConfirm
+                        message="danh mục"
+                        handle={() => handleDeleteUser(category?.id || "")}
+                        setClose={() => setConfirmDelete("-1")}
+                      />
+                    )}
+                    {isEdit === parseInt(category.id) && (
+                      <>
+                        <Modal_Show setClose={() => setIsEdit(-1)}>
+                          <AdminUpdateCategories
+                            category={category}
+                            setClose={() => setIsEdit(-1)}
+                            token={token || ""}
+                          />
+                        </Modal_Show>
+                      </>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </>
 
             {!isLoading && data?.length === 0 && (
               <Empty_State
@@ -303,8 +291,8 @@ function CategoriesManagement({ data_categories }: Props) {
 
       <div className="mt-2 flex justify-end">
         <Pagination
-          currentPage={pagination.current_page || 1}
-          totalPages={pagination.total_pages || 1}
+          currentPage={pagination?.current_page || 1}
+          totalPages={pagination?.total_pages || 1}
           onPageChange={handlePageChange}
         />
       </div>

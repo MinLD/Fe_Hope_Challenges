@@ -15,43 +15,40 @@ type Props = {
   token: string;
   category: I_category;
 };
-
-/**
- * ✅ Next 16: Refactored with useActionState + Server Actions
- *
- * Improvements:
- * - No manual loading state (auto-managed by useActionState)
- * - Credentials handled server-side (more secure)
- * - Auto cache invalidation (revalidatePath in action)
- * - Cleaner error handling
- * - Less boilerplate code
- */
 function AdminUpdateCategories({ setClose, token, category }: Props) {
   const [formData, setFormData] = useState({
     name: category?.name || "",
     description: category?.description || "",
-    image: category?.image.secure_url || "",
+    avatar: category?.avatar?.secure_url || "",
   });
   const initData = useRef({ ...formData });
   const router = useRouter();
-  const [image, setImage] = useState<File | null>(null);
+  const [image, setImage] = useState<File | null>();
   const [errors, setErrors] = useState<{
     [key: string]: string[] | undefined;
   }>({});
 
-  // ✅ useActionState: Auto-manages loading, pending states
-  // - isPending: automatically true while action runs
-  // - formAction: bind to form submission
-  // - state: action result (success/error)
   const [state, formAction, isPending] = useActionState(
     async (prevState: any, form: FormData) => {
-      // Client-side validation
-      const result = SHCEMA_categories.safeParse({
-        name: formData.name,
-        description: formData.description,
-        image: formData.image,  
-      });
+      let result;
 
+      if (image) {
+        result = SHCEMA_categories.safeParse({
+          name: formData.name,
+          description: formData.description,
+          avatar: image,
+        });
+      } else {
+        const TextSchema = SHCEMA_categories.omit({ avatar: true });
+
+        result = TextSchema.safeParse({
+          name: formData.name,
+          description: formData.description,
+          avatar: undefined,
+        });
+      }
+
+      console.log("Validation Result:", result.success);
       if (!result.success) {
         const fieldErrors = result.error.flatten().fieldErrors;
         setErrors(fieldErrors);
@@ -64,15 +61,15 @@ function AdminUpdateCategories({ setClose, token, category }: Props) {
       let isUpdate = false;
 
       Object.entries(formData).forEach(([key, value]) => {
-        if (key === "image") return;
+        if (key === "avatar") return;
         if (value !== (initData.current as any)[key]) {
           update_data.append(key, value);
           isUpdate = true;
         }
       });
 
-      if (formData.image !== initData.current.image && image) {
-        update_data.append("image", image);
+      if (formData.avatar !== initData.current.avatar && image) {
+        update_data.append("avatar", image);
         isUpdate = true;
       }
 
@@ -84,6 +81,10 @@ function AdminUpdateCategories({ setClose, token, category }: Props) {
       // Prepare FormData for server action
       update_data.append("categoryId", category.id);
       update_data.append("token", token);
+
+      update_data.forEach((value, key) => {
+        console.log(`${key}:`, value);
+      });
 
       // ✅ Call Server Action
       const actionResult = await updateCategoryAction(prevState, update_data);
@@ -112,7 +113,7 @@ function AdminUpdateCategories({ setClose, token, category }: Props) {
     {
       id: 2,
       name: "description",
-      type: "text",
+      type: "",
       placeholder: "Mô tả danh mục",
       disabled: false,
     },
@@ -132,7 +133,7 @@ function AdminUpdateCategories({ setClose, token, category }: Props) {
     const previewUrl = URL.createObjectURL(file);
     setFormData((prev) => ({
       ...prev,
-      image: previewUrl,
+      avatar: previewUrl,
     }));
   };
 
@@ -151,76 +152,97 @@ function AdminUpdateCategories({ setClose, token, category }: Props) {
 
       {/* ✅ Form with server action */}
       <form action={formAction} className="mt-5">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 ">
-          {inputs.map((input) => (
-            <div key={input.id} className="relative">
+        {/* LAYOUT CHÍNH: CHIA 2 CỘT */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="flex flex-col gap-4">
+            <div className="relative">
               <input
-                type={input?.type}
-                name={input.name}
-                placeholder={input.placeholder}
-                value={formData[input.name as keyof typeof formData]}
+                type="text"
+                name="name"
+                placeholder="Tên danh mục"
+                value={formData.name}
                 className="h-[50px] pl-2 pt-4 border border-[#8e8e8e] rounded-md w-full text-[#3c3c3c] text-[16px]"
-                onChange={(e) => handleChange(input.name, e.target.value)}
-                disabled={input.disabled || isPending}
+                onChange={(e) => handleChange("name", e.target.value)}
+                disabled={isPending}
               />
               <p className="absolute top-1 left-2 text-[#8e8e8e] text-[12px]">
-                {input.name}
+                Name
               </p>
-
-              {errors[input.name] && (
+              {errors["name"] && (
                 <p className="text-red-500 text-sm mt-1">
-                  {errors[input.name]?.[0]}
+                  {errors["name"]?.[0]}
                 </p>
               )}
             </div>
-          ))}
-          <div className="relative">
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleChangeFile}
-              className="h-[50px] pl-2 pt-4 border border-[#8e8e8e] rounded-md w-full text-[#3c3c3c] text-[16px]"
+
+            <div className="relative">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleChangeFile}
+                className="h-[50px] pl-2 pt-4 border border-[#8e8e8e] rounded-md w-full text-[#3c3c3c] text-[16px]"
+                disabled={isPending}
+              />
+              <p className="absolute top-1 left-2 text-[#8e8e8e] text-[12px]">
+                Hình ảnh danh mục
+              </p>
+              {errors["avatar"] && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors["avatar"]?.[0]}
+                </p>
+              )}
+            </div>
+          </div>
+
+          <div className="relative h-full">
+            <textarea
+              name="description"
+              placeholder="Mô tả danh mục"
+              value={formData.description}
+              className="h-full w-full p-2 pt-6 border border-[#8e8e8e] rounded-md text-[#3c3c3c] text-[16px] resize-none"
+              onChange={(e) => handleChange("description", e.target.value)}
               disabled={isPending}
             />
-            <p className="absolute top-1 left-2 text-[#8e8e8e] text-[12px]">
-              Hình ảnh danh mục
+            <p className="absolute top-2 left-2 text-[#8e8e8e] text-[12px]">
+              Description
             </p>
-            {errors["image"] && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors["image"]?.[0]}
+            {errors["description"] && (
+              <p className="text-red-500 text-sm mt-1 absolute -bottom-6 left-0">
+                {errors["description"]?.[0]}
               </p>
             )}
-            <p className="text-[#8e8e8e] text-[12px] mt-1">
-              {image ? image.name : "Chọn hình ảnh"}
-            </p>
           </div>
-          {formData.image && (
-            <div className="col-span-2">
-              <Image
-                width={100}
-                height={100}
-                src={formData.image}
-                alt="image"
-                className="w-25 h-25 object-cover"
-              />
-            </div>
-          )}
         </div>
 
-        <div className="flex justify-end mt-5 gap-2 items-center  ">
-          <div
-            className="text-[#3c3c3c] hover:cursor-pointer"
-            onClick={setClose}
-          >
-            {"Hủy"}
+        <div className="mt-6">
+          {formData.avatar && (
+            <div className="mb-4">
+              <p className="text-sm text-gray-500 mb-2">Xem trước hình ảnh: </p>
+              <div className="relative w-32 h-32 border border-gray-300 rounded-md overflow-hidden">
+                <Image
+                  fill
+                  src={formData.avatar}
+                  alt="image preview"
+                  className="object-cover"
+                />
+              </div>
+            </div>
+          )}
+          <div className="flex justify-end gap-2 items-center">
+            <div
+              className="text-[#3c3c3c] hover:cursor-pointer px-4 py-2"
+              onClick={setClose}
+            >
+              Hủy
+            </div>
+            <button
+              type="submit"
+              disabled={isPending}
+              className="bg-[#3c3c3c] text-white px-4 py-2 rounded-md hover:cursor-pointer disabled:bg-gray-400 min-w-[150px] flex justify-center"
+            >
+              {isPending ? <Spanning /> : "Cập nhật danh mục"}
+            </button>
           </div>
-          <button
-            type="submit"
-            disabled={isPending}
-            className="bg-[#3c3c3c] text-white p-3 rounded-md hover:cursor-pointer disabled:bg-gray-400"
-          >
-            {isPending ? <Spanning /> : "Cập nhật danh mục"}
-          </button>
         </div>
       </form>
     </div>

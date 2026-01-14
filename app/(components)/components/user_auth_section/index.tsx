@@ -1,51 +1,47 @@
-// components/header/UserAuthSection.tsx
 "use client";
 
 import { useAuth } from "@/app/hooks/useAuth";
 import { useNav } from "@/app/hooks/useNav";
 import { Menu } from "lucide-react";
 import Link from "next/link";
-import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
+// Đã xóa import react-loading-skeleton để dùng Tailwind cho nhẹ
+
 export default function UserAuthSection() {
   const { openHamsburg } = useNav();
-
   const { profile_user, isLoading } = useAuth();
-
-  const skeleton = <Skeleton width={100} height={30} />;
 
   return (
     <div className="flex items-center space-x-4">
-      {/* 1️⃣ TRẠNG THÁI LOADING: Hiện Skeleton */}
       {isLoading ? (
-        <div className="hidden sm:block">
-          {/* Skeleton giả lập chiều rộng của 2 nút hoặc tên user */}
-          <Skeleton width={140} height={36} borderRadius={4} />
+        <div className="hidden sm:flex items-center space-x-3 animate-pulse">
+          <div className="h-8 w-24 rounded bg-gray-200 dark:bg-gray-700" />
+
+          <div className="h-8 w-20 rounded bg-gray-300 dark:bg-gray-600" />
         </div>
       ) : !profile_user ? (
-        // 2️⃣ TRẠNG THÁI GUEST (Đã load xong + Không có user): Hiện nút Login
         <div className="hidden sm:flex items-center space-x-2">
           <Link href="/login">
-            <button className="text-gray-600 hover:text-green-600 font-medium px-3 py-1">
+            <button className="cursor-pointer px-3 py-1 font-medium text-gray-600 transition-all hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400">
               Đăng nhập
             </button>
           </Link>
           <Link href="/auth/register">
-            <button className="px-3 py-1 rounded-sm text-white bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 transition-all">
+            <button className="cursor-pointer rounded-sm bg-blue-600 px-3 py-1 text-white transition-all hover:bg-blue-800">
               Đăng ký
             </button>
           </Link>
         </div>
       ) : (
-        // 3️⃣ TRẠNG THÁI USER (Đã load xong + Có user): Hiện tên
-        <div className="font-bold text-green-700">
-          Hello, {profile_user?.username}
+        <div className="md:flex items-center justify-center font-bold text-blue-600 dark:text-blue-400 line-clamp-1 hidden space-x-1">
+          <span>Hello,</span>
+          <span className="font-bold text-gray-950 ">
+            {profile_user?.profile.fullname}
+          </span>
         </div>
       )}
 
-      {/* Menu Mobile: Luôn hiển thị không quan tâm login hay chưa */}
-      <div className="sm:hidden cursor-pointer" onClick={openHamsburg}>
-        <Menu />
+      <div className="cursor-pointer sm:hidden" onClick={openHamsburg}>
+        <Menu className="text-gray-700 dark:text-white" />
       </div>
     </div>
   );

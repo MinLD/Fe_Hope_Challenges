@@ -3,6 +3,12 @@
 @import "swiper/css";
 @import "swiper/css/navigation";
 @import "swiper/css/pagination";
+
+@theme {
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+
+  --font-pacifico: var(--font-pacifico), cursive;
+}
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -30,7 +36,6 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-geograph), Helvetica, Arial, sans-serif;
 }
 
 .swiper-pagination-bullet {
@@ -42,5 +47,8 @@ body {
   background-color: #00b14f !important;
 }
 .swiper-pagination {
-  bottom: 10px !important;
+  position: static !important; /* Chuyển từ Absolute (trôi) sang Static (nằm cố định) */
+  margin-top: 12px !important; /* Cách nội dung bên trên 20px */
+  bottom: auto !important; /* Xóa bỏ định vị đáy cũ */
+  transform: none !important; /* Xóa bỏ transform nếu có */
 }

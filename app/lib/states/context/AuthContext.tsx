@@ -1,6 +1,7 @@
 "use client";
 
 import { axiosClient } from "@/app/services/api_client";
+import { Ty_User } from "@/app/types/users";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import {
@@ -16,30 +17,16 @@ export interface InitialLoginProps {
   roles: string[] | [];
   userId: string | "";
   token: string | "";
-  profile_user?: I_profile_user;
+  profile_user?: Ty_User | undefined;
 }
 
 interface AuthState {
   token: string | null;
   userId: string | null;
   roles: string[] | null;
-  profile_user?: I_profile_user;
+  profile_user?: Ty_User;
   updateAuth?: (payload: InitialLoginProps) => void;
   isLoading: boolean;
-}
-
-interface I_profile_user {
-  id: string;
-  username: string;
-  points: number;
-  profile: {
-    id: string;
-    email: string;
-    avatar: string;
-    fullName: string;
-    bio: string;
-    date_of_birth: string;
-  };
 }
 
 export const AuthContext = createContext<AuthState | undefined>(undefined);
@@ -48,27 +35,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [token, setToken] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
   const [roles, setRoles] = useState<string[] | null>([]);
-  const [profile_user, setProfile_user] = useState<
-    I_profile_user | undefined
-  >();
+  const [profile_user, setProfile_user] = useState<Ty_User | undefined>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const router = useRouter();
   useEffect(() => {
     const fetchData = async () => {
       if (!profile_user) {
-        console.log(
-          "⚠️ Client: Dữ liệu SSR trống. Thử gọi API để kích hoạt Interceptor Refresh..."
-        );
+        console.log("⚠️ Client: Kiểm tra phiên đăng nhập...");
         try {
-          const res = await axios.get("apiFe/auth/whoami");
-          const data = await res.data;
-          console.log("res", data);
-          
-          console.log("✅ Client: Refresh thành công! Cập nhật lại User.");
+          await axiosClient.get("/auth/whoami", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          console.log(
+            "✅ Client: Phiên đăng nhập hợp lệ (hoặc đã refresh thành công)."
+          );
           router.refresh();
         } catch (error) {
-          console.log("❌ Client: Refresh thất bại hoặc user chưa đăng nhập.");
-          console.log("error", error);
+          console.log("❌ Client: Phiên đăng nhập hết hạn. Không thể refresh.");
         }
       }
     };

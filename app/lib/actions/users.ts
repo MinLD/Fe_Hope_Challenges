@@ -25,12 +25,10 @@ export async function createUserAction(prevState: any, formData: FormData) {
 
     // Extract form data
     const userData: I_FormUser = {
-      username: formData.get("username") as string,
       email: formData.get("email") as string,
       password: formData.get("password") as string,
       fullname: formData.get("fullname") as string,
       role: formData.get("role") as string,
-      points: parseInt(formData.get("points") as string) || 0,
     };
 
     // ✅ API call on server side

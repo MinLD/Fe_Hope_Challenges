@@ -10,6 +10,7 @@ import { useAuth } from "@/app/hooks/useAuth";
 import { Api_Register } from "@/app/services/user";
 import InputBox from "@/app/(components)/components/input_box";
 import ForgotPasswordForm from "@/app/(components)/components/forgot_password_form";
+import Logo from "@/app/(components)/components/logo";
 
 type FormData = {
   email: string;
@@ -169,14 +170,7 @@ export default function Login() {
         <div className="bg-white rounded-2xl shadow-xl py-4 px-6">
           {/* Logo */}
           <div className="text-center mb-4 flex justify-center mt-5">
-            <Link href="/" className="flex items-center space-x-2">
-              <div className="flex items-center justify-center w-10 h-10 bg-gradient-to-br from-green-500 to-blue-600 rounded-lg">
-                <Leaf className="w-8 h-8 text-white" />
-              </div>
-              <span className="text-2xl font-bold bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">
-                Green Challenge
-              </span>
-            </Link>
+            <Logo />
           </div>
 
           {isLogin === "forgotPassword" ? (
@@ -206,14 +200,14 @@ export default function Login() {
                     <label className="flex items-center">
                       <input
                         type="checkbox"
-                        className="text-[#16a34a] focus:ring-[#16a34a] border-gray-300 rounded outline-none"
+                        className="text-blue-600 focus:ring-blue-500 border-gray-300 rounded outline-none"
                       />
                       <span className="ml-2 text-sm text-gray-600">
                         Ghi nhớ mật khẩu
                       </span>
                     </label>
                     <div
-                      className="text-sm text-[#16a34a] hover:text-[#16a34a] font-medium"
+                      className="text-sm text-blue-600 hover:text-blue-700 font-medium"
                       onClick={() => setIsLogin("forgotPassword")}
                     >
                       Quên mật khẩu?

@@ -4,8 +4,8 @@ import Link from "next/link";
 export default function NotFound() {
   return (
     <div className="flex min-h-[calc(100vh-200px)] flex-col items-center justify-center text-center">
-      <div className="rounded-full bg-green-100 p-6">
-        <SearchX className="h-16 w-16 text-green-600" />
+      <div className="rounded-full bg-blue-100 p-6">
+        <SearchX className="h-16 w-16 text-blue-600" />
       </div>
       <h1 className="mt-8 text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
         404
@@ -18,7 +18,7 @@ export default function NotFound() {
         không tồn tại. Vui lòng kiểm tra lại đường dẫn.
       </p>
       <Link href="/">
-        <button className="mt-8 inline-flex items-center justify-center rounded-lg bg-green-600 px-6 py-3 text-base font-medium text-white shadow-sm transition-colors hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
+        <button className="mt-8 inline-flex items-center justify-center rounded-lg bg-blue-600 px-6 py-3 text-base font-medium text-white shadow-sm transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
           Quay về Trang chủ
         </button>
       </Link>

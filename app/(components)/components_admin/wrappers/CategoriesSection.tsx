@@ -9,7 +9,7 @@ async function CategoriesSection() {
     <>
       <div className="container mx-auto py-2 ">
         <h1 className="text-3xl font-bold text-gray-800 mb-6 sm:text-center">
-          Quản Lý Danh Mục Thử Thách
+          Quản Lý Danh Mục
         </h1>
         <Suspense fallback={<SkeletonManagers />}>
           <CategoriesManagement data_categories={{ categories, pagination }} />

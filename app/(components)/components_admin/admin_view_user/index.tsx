@@ -1,3 +1,4 @@
+"use client";
 import { Eye, EyeClosed, X } from "lucide-react";
 import { useActionState, useRef, useState } from "react";
 import { toast } from "sonner";
@@ -17,12 +18,14 @@ function AdminViewUser({ setClose, token, user }: Props) {
   const [formData, setFormData] = useState({
     email: user.email ?? "",
     fullname: user.profile?.fullname ?? "",
+    phone: user.profile?.phone ?? "",
     avatar: user.profile?.avatar?.secure_url ?? "",
     date_of_birth: user.profile?.date_of_birth
       ? user.profile.date_of_birth.slice(0, 10)
       : "",
-    points: user?.wallet_balance || 0,
+    wallet_balance: user?.wallet_balance || 0,
     role: user.roles[0]?.name || "user",
+    reputation_score: String(user?.profile?.reputation_score || 0),
   });
   const initialData = useRef({ ...formData });
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
@@ -59,6 +62,13 @@ function AdminViewUser({ setClose, token, user }: Props) {
       placeholder: "Họ và tên",
       disabled: false,
     },
+    {
+      id: 3,
+      name: "phone",
+      type: "text",
+      placeholder: "Số điện thoại",
+      disabled: false,
+    },
 
     {
       id: 4,
@@ -73,6 +83,13 @@ function AdminViewUser({ setClose, token, user }: Props) {
       name: "wallet_balance",
       type: "number",
       placeholder: "Time points",
+      disabled: false,
+    },
+    {
+      id: 6,
+      name: "reputation_score",
+      type: "reputation_score",
+      placeholder: "Điểm uy tín",
       disabled: false,
     },
   ];
@@ -132,6 +149,9 @@ function AdminViewUser({ setClose, token, user }: Props) {
 
     changeData.append("token", token);
     changeData.append("userId", user.id);
+    Array.from(changeData.entries()).forEach(([key, value]) => {
+      console.log(`${key}: ${value}`);
+    });
 
     formAction(changeData);
   };

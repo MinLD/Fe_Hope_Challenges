@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import axios from "axios";
 import SidebarNavList from "@/app/(components)/components/sidebar_nav_list";
+import SidebarNavSkeleton from "@/app/(components)/components/sidebar_navList_skeleton";
+import Logo from "@/app/(components)/components/logo";
 
 type Props = {
   isSidebarOpen: boolean;
@@ -46,20 +48,11 @@ function Sibar({ isSidebarOpen, data }: Props) {
       >
         <div className="flex items-center justify-center w-full h-[80px] border-b-1 border-gray-600">
           <div className="text-center mb-4 flex justify-center mt-5">
-            <Link href="/" className="flex items-center space-x-2">
-              <div className="flex items-center justify-center w-8 h-8 bg-gradient-to-br from-green-500 to-blue-600 rounded-lg">
-                <Leaf className="w-5 h-5 text-white" />
-              </div>
-              <span className="text-xl font-bold bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">
-                Green Challenge
-              </span>
-            </Link>
+            <Logo />
           </div>
         </div>
         <div className="flex-1 mt-5 overflow-y-auto">
-          <Suspense
-            fallback={<div className="p-4 text-gray-500">Đang tải menu...</div>}
-          >
+          <Suspense fallback={SidebarNavSkeleton({ data })}>
             <SidebarNavList data={data} />
           </Suspense>
         </div>

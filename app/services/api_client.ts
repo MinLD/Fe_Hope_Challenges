@@ -18,6 +18,7 @@ if (typeof window !== "undefined") {
     },
     async (error) => {
       const originalRequest = error.config;
+      console.log("🚨 Axios Interceptor caught an error:", error);
       if (error.response?.status === 401 && !originalRequest._retry) {
         originalRequest._retry = true;
         console.log(
@@ -26,7 +27,7 @@ if (typeof window !== "undefined") {
         try {
           const res = await axios.post(`${FeUrl}/apiFe/auth/refreshtoken`);
           console.log("Đã làm mới token thành công:", res.data);
-          const newAccessToken = res.data.data.access_token;
+          const newAccessToken = res.data.access_token;
           originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
           return axiosClient(originalRequest);
         } catch (errorRefresh) {

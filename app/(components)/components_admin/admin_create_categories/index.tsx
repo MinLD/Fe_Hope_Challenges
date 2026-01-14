@@ -1,3 +1,4 @@
+"use client";
 import { X } from "lucide-react";
 import { useActionState, useState } from "react";
 import { toast } from "sonner";
@@ -25,7 +26,7 @@ function AdminCreateCategories({ setClose, token }: Props) {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
-    image: "",
+    avatar: "",
   });
   const [image, setImage] = useState<File | null>(null);
   const [errors, setErrors] = useState<{
@@ -40,13 +41,15 @@ function AdminCreateCategories({ setClose, token }: Props) {
       const result = SHCEMA_categories.safeParse({
         name: formData.name,
         description: formData.description,
-        image: formData.image,
+        avatar: image,
       });
 
       if (!result.success) {
         const fieldErrors = result.error.flatten().fieldErrors;
         setErrors(fieldErrors);
-        toast.warning("Thông tin bạn nhập chưa hợp lệ!");
+        console.log("Validation errors:", fieldErrors);
+        toast.warning("Vui lòng kiểm tra lại thông tin nhập vào");
+        console.log(result.error.flatten().fieldErrors);
         return { success: false };
       }
 
@@ -55,18 +58,20 @@ function AdminCreateCategories({ setClose, token }: Props) {
       dataForm.append("name", formData.name);
       dataForm.append("description", formData.description);
       if (image) {
-        dataForm.append("image", image);
+        dataForm.append("avatar", image);
       }
       dataForm.append("token", token);
 
       // ✅ Call Server Action
       const actionResult = await createCategoryAction(prevState, dataForm);
+      console.log(actionResult);
 
       if (actionResult.success) {
-        toast.success(actionResult.message);
+        toast.success(actionResult.data.message);
         router.refresh();
         setClose();
       } else {
+        console.log(actionResult.error);
         toast.error(actionResult.error);
       }
 
@@ -83,6 +88,7 @@ function AdminCreateCategories({ setClose, token }: Props) {
       placeholder: "Tên danh mục",
       disabled: false,
     },
+
     {
       id: 2,
       name: "description",
@@ -159,21 +165,23 @@ function AdminCreateCategories({ setClose, token }: Props) {
             <p className="absolute top-1 left-2 text-[#8e8e8e] text-[12px]">
               Hình ảnh danh mục
             </p>
-            {errors["image"] && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors["image"]?.[0]}
+            {errors["avatar"] && (
+              <p className="text-red-500 text-sm mt-1 flex flex-col">
+                {errors["avatar"].map((err, idx) => (
+                  <span key={idx}>{err}</span>
+                ))}
               </p>
             )}
             <p className="text-[#8e8e8e] text-[12px] mt-1">
               {image ? image.name : "Chọn hình ảnh"}
             </p>
           </div>
-          {formData.image && (
+          {formData.avatar && (
             <div className="col-span-2">
               <Image
                 width={100}
                 height={100}
-                src={formData.image}
+                src={formData.avatar}
                 alt="image"
                 className="w-25 h-25 object-cover"
               />

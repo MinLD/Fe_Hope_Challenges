@@ -46,7 +46,9 @@ const CheckCircleIcon = () => (
 type ForgotPasswordFormProps = {
   setIsLogin: (value: string) => void;
 };
-export default function ForgotPasswordForm({ setIsLogin }: ForgotPasswordFormProps) {
+export default function ForgotPasswordForm({
+  setIsLogin,
+}: ForgotPasswordFormProps) {
   // --- State for Forgot Password ---
   const [stage, setStage] = useState<"request" | "verify" | "success">(
     "request"
@@ -186,7 +188,7 @@ export default function ForgotPasswordForm({ setIsLogin }: ForgotPasswordFormPro
               <div className="mt-6 text-center">
                 <a
                   href="/login"
-                  className="text-sm text-[#16a34a] hover:text-[#16a34a] font-medium"
+                  className="text-sm text-blue-600 hover:text-blue-700 font-medium"
                 >
                   Quay lại Đăng nhập
                 </a>
@@ -219,7 +221,7 @@ export default function ForgotPasswordForm({ setIsLogin }: ForgotPasswordFormPro
                     required
                     value={otp}
                     onChange={(e) => setOtp(e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500 transition tracking-[.5em] text-center"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition tracking-[.5em] text-center"
                     placeholder="_ _ _ _ _ _"
                   />
                 </div>
@@ -237,7 +239,7 @@ export default function ForgotPasswordForm({ setIsLogin }: ForgotPasswordFormPro
                     required
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500 transition"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition"
                     placeholder="Nhập mật khẩu mới"
                   />
                 </div>
@@ -255,7 +257,7 @@ export default function ForgotPasswordForm({ setIsLogin }: ForgotPasswordFormPro
                     required
                     value={confirmNewPassword}
                     onChange={(e) => setConfirmNewPassword(e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500 transition"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition"
                     placeholder="Nhập lại mật khẩu mới"
                   />
                 </div>
@@ -275,7 +277,7 @@ export default function ForgotPasswordForm({ setIsLogin }: ForgotPasswordFormPro
               <div className="mt-6 text-center">
                 <div
                   onClick={() => setIsLogin("login")}
-                  className="text-sm text-[#16a34a] hover:text-[#16a34a] font-medium"
+                  className="text-sm text-blue-600 hover:text-blue-700 font-medium"
                 >
                   Quay lại Đăng nhập
                 </div>
@@ -296,7 +298,7 @@ export default function ForgotPasswordForm({ setIsLogin }: ForgotPasswordFormPro
               </p>
               <div
                 onClick={() => setIsLogin("login")}
-                className="mt-6 inline-block w-full text-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700"
+                className="mt-6 inline-block w-full text-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 cursor-pointer transition-all duration-300"
               >
                 Đi đến trang Đăng nhập
               </div>

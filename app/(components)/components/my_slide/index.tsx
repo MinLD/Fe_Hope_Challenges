@@ -47,7 +47,7 @@ function MySlider({ children, className, swiperOptions }: Props) {
       <Swiper
         {...defaultOptions}
         {...swiperOptions}
-        className="rounded-lg pb-10"
+        className="rounded-lg pb-4"
       >
         {children}
       </Swiper>

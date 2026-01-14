@@ -22,23 +22,23 @@ export function SkeletonManagers() {
           {/* Header Bảng */}
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-4">
+              <th className="px-6 py-4" key={0}>
                 <Skeleton width={120} />
               </th>{" "}
               {/* Tên người dùng */}
-              <th className="px-6 py-4">
+              <th className="px-6 py-4" key={1}>
                 <Skeleton width={180} />
               </th>{" "}
               {/* Email */}
-              <th className="px-6 py-4">
+              <th className="px-6 py-4" key={2}>
                 <Skeleton width={60} />
               </th>{" "}
               {/* Vai trò */}
-              <th className="px-6 py-4">
+              <th className="px-6 py-4" key={3}>
                 <Skeleton width={100} />
               </th>{" "}
               {/* Trạng thái */}
-              <th className="px-6 py-4">
+              <th className="px-6 py-4" key={4}>
                 <Skeleton width={80} />
               </th>{" "}
               {/* Hành động */}
@@ -49,20 +49,20 @@ export function SkeletonManagers() {
           <tbody className="bg-white divide-y divide-gray-200">
             {Array.from({ length: 5 }).map((_, index) => (
               <tr key={index}>
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="px-6 py-4 whitespace-nowrap" key={0}>
                   <Skeleton width={100} height={20} />
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="px-6 py-4 whitespace-nowrap" key={1}>
                   <Skeleton width={220} height={20} />
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="px-6 py-4 whitespace-nowrap" key={2}>
                   <Skeleton width={40} height={20} />
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="px-6 py-4 whitespace-nowrap" key={3}>
                   {/* Giả lập cái Dropdown Select (Cao hơn text bình thường) */}
                   <Skeleton width={120} height={36} borderRadius={6} />
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="px-6 py-4 whitespace-nowrap" key={4}>
                   {/* Giả lập 2 nút Xem (Xanh) và Xóa (Đỏ) */}
                   <div className="flex gap-3">
                     <Skeleton width={35} height={20} />

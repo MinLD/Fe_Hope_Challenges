@@ -15,7 +15,7 @@ function HeaderBottom() {
             className={`  relative  w-full flex-1 max-w-[300px] md:max-w-[500px]   transition-all ease-in-out duration-300`}
           >
             <input
-              placeholder="Tìm kiếm việc làm, hoàn cảnh cần giúp đỡ..."
+              placeholder="Tìm kiếm"
               type="text"
               className={`pl-3 p-1 pr-8  w-full flex-1 border rounded-[10px] border-[#fff] placeholder:text-[14px] text-[#fff] outline-none`}
             />
@@ -25,17 +25,7 @@ function HeaderBottom() {
           </form>
         </div>
 
-        <div className="flex items-center gap-4 justify-center ">
-          <div className="flex flex-col gap-[1px] ">
-            <p className="text-[11px] text-[#c5c5c5]">Bạn là Đối Tác?</p>
-            <Link href="/register/partner">
-              <div className="flex cursor-pointer items-center gap-1 text-[14px] hover:text-[#00ff73] text-[#4ae08da4] transition-all ease-in-out duration-300">
-                <p className="text-[14px] font-medium">Đăng ký ngay</p>
-                <IoIosArrowForward />
-              </div>
-            </Link>
-          </div>
-        </div>
+        <div className="flex items-center gap-4 justify-center "></div>
       </div>
     </MyLayout>
   );
