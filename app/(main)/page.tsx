@@ -1,4 +1,4 @@
-import Banner from "@/app/(components)/components/banner";
+import Banner from "@/app/components/banner";
 import { Suspense } from "react";
 
 function BannerSkeleton() {

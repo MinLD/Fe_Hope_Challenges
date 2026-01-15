@@ -1,12 +1,17 @@
 import { Geist, Pacifico } from "next/font/google";
+
 import "./globals.css";
 import type { Metadata } from "next";
-import { NavProvider } from "@/app/lib/states/context/nav";
-import HamburgerMenu from "@/app/(components)/components/hamsbuger_menu";
-import { AuthProvider } from "@/app/lib/states/context/AuthContext";
+import { NavProvider } from "@/app/lib/context/nav";
+import HamburgerMenu from "@/app/components/hamsbuger_menu";
+import { AuthProvider } from "@/app/lib/context/AuthContext";
 import { Toaster } from "sonner";
-import AuthSSRInit from "@/app/(components)/auth/AuthSSRInit";
+import AuthSSRInit from "@/app/components/auth/AuthSSRInit";
+import SmoothLoadingWrapper from "@/app/components/loading_screen/SmoothLoadingWrapper";
+import { AntdRegistry } from "@ant-design/nextjs-registry";
+import AntdProvider from "@/app/components/antd/AntdProvider";
 import { Suspense } from "react";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 export const metadata: Metadata = {
   title: "Skill Time",
@@ -26,12 +31,6 @@ const pacifico = Pacifico({
   subsets: ["latin"],
 });
 
-function AuthInitSkeleton() {
-  return (
-    <div className="w-full h-1 bg-gradient-to-r from-blue-200 via-blue-100 to-transparent animate-pulse" />
-  );
-}
-
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -43,18 +42,21 @@ export default async function RootLayout({
         <body
           className={`${geistSans.variable} ${pacifico.variable} antialiased bg-[#0f172a] text-white`}
         >
-          <AuthProvider>
-            <NavProvider>
-              <Suspense fallback={<AuthInitSkeleton />}>
-                <AuthSSRInit />
-              </Suspense>
-
-              {children}
-
-              <HamburgerMenu />
-              <Toaster position="top-right" closeButton />
-            </NavProvider>
-          </AuthProvider>
+          <GoogleOAuthProvider
+            clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || ""}
+          >
+            <SmoothLoadingWrapper />
+            <AuthProvider>
+              <NavProvider>
+                <Suspense>
+                  <AuthSSRInit />
+                </Suspense>
+                <AntdProvider>{children}</AntdProvider>
+                <HamburgerMenu />
+                <Toaster position="top-right" closeButton />
+              </NavProvider>
+            </AuthProvider>
+          </GoogleOAuthProvider>
         </body>
       </html>
     </>

@@ -1,17 +1,9 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { Api_Admin_User, Api_Delete_User } from "@/app/services/user";
-import { I_FormUser } from "@/app/types/users";
+import { Api_Admin_User, Api_Delete_User } from "@/app/lib/services/user";
+import { I_FormUser } from "@/app/lib/types/users";
 
-/**
- * ✅ Next 16 Server Action: Create User (Admin)
- *
- * Benefits:
- * - Credentials handled server-side
- * - Auto cache invalidation
- * - Type-safe mutations
- */
 export async function createUserAction(prevState: any, formData: FormData) {
   try {
     const token = formData.get("token") as string;
@@ -125,6 +117,43 @@ export async function updateUserAction(prevState: any, formData: FormData) {
     };
   } catch (error: any) {
     console.error("[updateUserAction] Error:", error.message);
+    return {
+      success: false,
+      error: error.message || "Cập nhật người dùng thất bại",
+    };
+  }
+}
+
+export async function updateUserProfileAction(formData: FormData) {
+  try {
+    const token = formData.get("token") as string;
+
+    // ✅ API call on server side
+    const response = await fetch(`http://127.0.0.1:5000/api/users/profile`, {
+      method: "PATCH",
+      body: formData,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Cập nhật người dùng thất bại");
+    }
+
+    const result = await response.json();
+
+    // ✅ Revalidate cache after mutation
+    revalidatePath("/");
+
+    return {
+      success: true,
+      data: result.data,
+      message: "Cập nhật người dùng thành công",
+    };
+  } catch (error: any) {
+    console.error("[updateUserProfileAction] Error:", error.message);
     return {
       success: false,
       error: error.message || "Cập nhật người dùng thất bại",

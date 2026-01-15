@@ -1,11 +1,11 @@
 import { Suspense } from "react";
-import AdminPage from "@/app/(components)/components_admin/admin_page";
-import UsersSection from "@/app/(components)/components_admin/wrappers/UsersSection";
-import ChallengesSection from "@/app/(components)/components_admin/wrappers/ChallengesSection";
+import AdminPage from "@/app/components/admin/admin_page";
+import UsersSection from "@/app/components/admin/wrappers/UsersSection";
+import ChallengesSection from "@/app/components/admin/wrappers/ChallengesSection";
 import Skeleton from "react-loading-skeleton";
-import CategoriesSection from "@/app/(components)/components_admin/wrappers/CategoriesSection";
-import DashBoardSection from "@/app/(components)/components_admin/wrappers/DashBoardSection";
-import ManagementSkillSection from "@/app/(components)/components_admin/wrappers/ManagementSkillSection";
+import CategoriesSection from "@/app/components/admin/wrappers/CategoriesSection";
+import DashBoardSection from "@/app/components/admin/wrappers/DashBoardSection";
+import ManagementSkillSection from "@/app/components/admin/wrappers/ManagementSkillSection";
 
 type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
 

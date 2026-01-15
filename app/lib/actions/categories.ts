@@ -5,12 +5,12 @@ import {
   Api_create_category,
   Api_update_category,
   Api_delete_category,
-} from "@/app/services/categories";
+} from "@/app/lib/services/categories";
 import {
   Api_create_skill,
   Api_delete_skill,
   Api_update_skill,
-} from "@/app/services/skills";
+} from "@/app/lib/services/skills";
 
 export async function createCategoryAction(prevState: any, formData: FormData) {
   try {

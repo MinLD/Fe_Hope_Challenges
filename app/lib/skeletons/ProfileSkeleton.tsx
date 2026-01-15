@@ -1,4 +1,4 @@
-// app/(components)/components/ProfileSkeleton.tsx
+// app/lib/skeletons/ProfileSkeleton.tsx
 
 export function SidebarSkeleton() {
   return (

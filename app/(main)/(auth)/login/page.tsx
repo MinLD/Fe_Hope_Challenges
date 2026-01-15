@@ -1,4 +1,4 @@
-import Login from "@/app/(components)/components/(auth)/AuthForm";
+import Login from "@/app/components/(auth)/AuthForm";
 
 function page() {
   

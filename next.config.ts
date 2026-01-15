@@ -3,11 +3,27 @@ const URL = "http://127.0.0.1:5000/api";
 const nextConfig: NextConfig = {
   reactCompiler: false,
   cacheComponents: true,
-
+  async headers() {
+    return [
+      {
+        source: "/(.*)", // Áp dụng cho toàn bộ trang web
+        headers: [
+          {
+            key: "Cross-Origin-Opener-Policy",
+            value: "same-origin-allow-popups", // QUAN TRỌNG: Cho phép popup giao tiếp
+          },
+          {
+            key: "Cross-Origin-Embedder-Policy",
+            value: "unsafe-none", // Thường cần thiết để Google Login hoạt động mượt
+          },
+        ],
+      },
+    ];
+  },
   async rewrites() {
     return [
       {
-        source: "/apiFe/:path*",
+        source: "/api/:path*",
         destination: `${URL}/:path*`,
       },
     ];

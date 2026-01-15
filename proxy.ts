@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { jwtDecode } from "jwt-decode";
-import { DecodedToken } from "@/app/types/users";
+import { DecodedToken } from "@/app/lib/types/users";
 
 const authPaths = ["/login", "/register"];
 const privatePathsAdmin = ["/admin"];
@@ -61,7 +61,7 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!api/|apiFe/|_next/static|_next/image|favicon.ico).*)"],
+  matcher: ["/((?!api/|_next/static|_next/image|favicon.ico).*)"],
 };
 
 export const proxy = middleware;

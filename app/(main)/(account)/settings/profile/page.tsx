@@ -1,9 +1,12 @@
-import Profile_Page from "@/app/(components)/components/profile_page";
+import Profile_Page from "@/app/components/profile_page";
 
-function page() {
+import { SSR_Skills } from "@/app/lib/data/skills";
+
+async function page() {
+  const res = await SSR_Skills();
   return (
     <>
-      <Profile_Page />
+      <Profile_Page initialSkills={res} />
     </>
   );
 }
