@@ -12,6 +12,7 @@ import { AntdRegistry } from "@ant-design/nextjs-registry";
 import AntdProvider from "@/app/components/antd/AntdProvider";
 import { Suspense } from "react";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import { ConfigProvider, theme } from "antd";
 
 export const metadata: Metadata = {
   title: "Skill Time",
@@ -42,21 +43,27 @@ export default async function RootLayout({
         <body
           className={`${geistSans.variable} ${pacifico.variable} antialiased bg-[#0f172a] text-white`}
         >
-          <GoogleOAuthProvider
-            clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || ""}
+          <ConfigProvider
+            theme={{
+              algorithm: theme.darkAlgorithm,
+            }}
           >
-            <SmoothLoadingWrapper />
-            <AuthProvider>
-              <NavProvider>
-                <Suspense>
-                  <AuthSSRInit />
-                </Suspense>
-                <AntdProvider>{children}</AntdProvider>
-                <HamburgerMenu />
-                <Toaster position="top-right" closeButton />
-              </NavProvider>
-            </AuthProvider>
-          </GoogleOAuthProvider>
+            <GoogleOAuthProvider
+              clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || ""}
+            >
+              <SmoothLoadingWrapper />
+              <AuthProvider>
+                <NavProvider>
+                  <Suspense>
+                    <AuthSSRInit />
+                  </Suspense>
+                  <AntdProvider>{children}</AntdProvider>
+                  <HamburgerMenu />
+                  <Toaster position="top-right" closeButton />
+                </NavProvider>
+              </AuthProvider>
+            </GoogleOAuthProvider>
+          </ConfigProvider>
         </body>
       </html>
     </>

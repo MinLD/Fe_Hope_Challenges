@@ -19,11 +19,15 @@ export interface I_skill {
   };
 }
 export interface I_skills_user {
+  id: string;
+  skill_id: string;
   level: string;
   proof_link: string;
   user_id: string;
-  skill_id: string;
   skill: I_skill;
+  avatar: {
+    secure_url: string;
+  };
 }
 export interface I_skills_data {
   skills: I_skill[];

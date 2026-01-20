@@ -81,6 +81,19 @@ const SCHEMA_skill = z.object({
     ),
 });
 const SCHEMA_skill_update = SCHEMA_skill.partial();
+const SHCHEMA_SkillUser = z.object({
+  category_id: z
+    .number({ required_error: "Vui lòng chọn danh mục" })
+    .min(1, "Vui lòng chọn danh mục"),
+  skill_id: z
+    .number({ required_error: "Vui lòng chọn kỹ năng" })
+    .min(1, "Vui lòng chọn kỹ năng"),
+  level: z.enum(["beginner", "intermediate", "advanced", "expert"], {
+    required_error: "Vui lòng chọn trình độ",
+  }),
+});
+export type SkillFormValues = z.infer<typeof SHCHEMA_SkillUser>;
+const SHCHEMA_SkillUserUpdate = SHCHEMA_SkillUser.partial();
 export {
   SCHEMA_user,
   SCHEMA_user_update,
@@ -88,4 +101,6 @@ export {
   SCHEMA_categories_update,
   SCHEMA_skill,
   SCHEMA_skill_update,
+  SHCHEMA_SkillUser,
+  SHCHEMA_SkillUserUpdate,
 };

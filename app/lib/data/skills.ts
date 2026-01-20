@@ -1,3 +1,4 @@
+"use server";
 import { BeUrl } from "@/app/lib/services/api_client";
 import { cookies } from "next/headers";
 
@@ -16,9 +17,6 @@ export async function SSR_Skills() {
     return res.data;
   } catch (error: any) {
     console.log("[SSR_Skills] Failed to fetch users:", error?.message);
-    return {
-      data: [],
-      error: "401",
-    };
+    return [];
   }
 }

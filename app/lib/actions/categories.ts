@@ -5,6 +5,7 @@ import {
   Api_create_category,
   Api_update_category,
   Api_delete_category,
+  Api_get_all_skills_in_category,
 } from "@/app/lib/services/categories";
 import {
   Api_create_skill,
@@ -192,6 +193,31 @@ export async function deleteSkillAction(skillId: string, token: string) {
         error.response?.data?.message ||
         error.message ||
         "Xóa kỹ năng thất bại",
+    };
+  }
+}
+
+export async function getSkillsByCategoryAction(categoryId: string) {
+  try {
+    // This action is for client-side usage, so we don't strictly need a token if it's public data,
+    // but the API wrapper might expect one or we can use a client fetching strategy.
+    // However, since we have the service `Api_get_all_skills_in_category`, let's try to use it.
+    // Note: The service uses `axiosClient` which might handle base URL.
+    // `Api_get_all_skills_in_category` signature: (categoryId, page, per_page)
+
+    // We want ALL skills for the dropdown, so page 1, large per_page
+    const result = await Api_get_all_skills_in_category(categoryId, 1, 100);
+
+    return {
+      success: true,
+      data: result.data.data.skills, // Adjust based on actual API response structure
+    };
+  } catch (error: any) {
+    console.error("[getSkillsByCategoryAction] Error:", error?.message);
+    return {
+      success: false,
+      data: [],
+      error: error?.message || "Failed to fetch skills",
     };
   }
 }

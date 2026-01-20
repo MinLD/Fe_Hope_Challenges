@@ -28,4 +28,17 @@ const Api_delete_skill = async (skillId: string, token: string) => {
     },
   });
 };
-export { Api_create_skill, Api_update_skill, Api_delete_skill };
+const Api_create_user_skill = async (data: any, token: string) => {
+  return axiosClient.post(`/user_skills`, data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "multipart/form-data",
+    },
+  });
+};
+export {
+  Api_create_skill,
+  Api_update_skill,
+  Api_delete_skill,
+  Api_create_user_skill,
+};

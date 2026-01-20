@@ -12,14 +12,19 @@ import { UserInformation } from "@/app/components/profile/UserInformation";
 import { SkillInformation } from "@/app/components/profile/SkillInformation";
 import MembershipTab from "@/app/components/profile/MembershipTab";
 import SecurityTab from "@/app/components/profile/SecurityTab";
-import { I_skills_user } from "@/app/lib/types/categories";
+import { I_skills_user, I_category } from "@/app/lib/types/categories";
 
 interface ProfilePageProps {
   initialSkills?: I_skills_user[];
+  categories?: I_category[];
+  skillsSlot?: React.ReactNode;
 }
 
-export default function ProfilePage({ initialSkills }: ProfilePageProps) {
-  console.log(initialSkills);
+export default function ProfilePage({
+  initialSkills,
+  categories,
+  skillsSlot,
+}: ProfilePageProps) {
   const { profile_user, isLoading } = useAuth();
 
   const tabs: TabItem[] = [
@@ -33,7 +38,12 @@ export default function ProfilePage({ initialSkills }: ProfilePageProps) {
       id: "skills",
       label: "Kỹ năng",
       icon: Zap,
-      content: <SkillInformation initialSkills={initialSkills || []} />,
+      content: skillsSlot || (
+        <SkillInformation
+          initialSkills={initialSkills || []}
+          categories={categories || []}
+        />
+      ),
     },
     {
       id: "membership",
