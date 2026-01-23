@@ -100,3 +100,60 @@ Mọi đóng góp đều được hoan nghênh! Vui lòng tạo Pull Request ho�
 <div align="center">
   <sub>Built with ❤️ by Fe Hope Challenges Team</sub>
 </div>
+
+
+
+kế hoạch
+PHẦN 2: KẾ HOẠCH TRIỂN KHAI TƯƠNG LAI (ROADMAP) 🚀
+Dưới đây là lộ trình bài bản để biến các bảng dữ liệu rời rạc thành một ứng dụng chạy được.
+
+🔥 GIAI ĐOẠN 2: HỆ THỐNG TÀI CHÍNH & VÍ (Làm ngay tiếp theo)
+Mục tiêu: Xử lý dòng chảy của Time-Credits. Không có tiền thì không book được lịch.
+
+API Nạp/Rút giả lập: Admin tặng tiền (Bonus) cho user để test, hoặc User nạp tiền (giả lập).
+
+Logic Chuyển tiền (Core): Viết hàm transfer_credits (A chuyển cho B) có tính chất Atomic (Giao dịch nguyên tử - A trừ thì B mới được cộng, lỗi là hoàn tác cả hai).
+
+API Lịch sử giao dịch: Xem biến động số dư ("Tôi đã tiêu gì?").
+
+⚡ GIAI ĐOẠN 3: GHÉP NHANH & REAL-TIME (Instant Match)
+Mục tiêu: Tính năng "Uber cho việc học". Cần xử lý thời gian thực.
+
+Cài đặt Socket.IO: Tích hợp Flask-SocketIO vào dự án.
+
+Cơ chế Online/Offline: User bật nút "Sẵn sàng dạy" -> Server lưu trạng thái vào Redis hoặc Memory.
+
+Luồng Matching:
+
+Học viên bấm "Tìm người giúp Python".
+
+Server tìm User có skill "Python" && đang Online.
+
+Server bắn Socket thông báo tới Tutor.
+
+Tạo Phiên (Session): Khi Tutor nhận kèo -> Tạo bản ghi MatchSession.
+
+📚 GIAI ĐOẠN 4: KHÓA HỌC & LỘ TRÌNH (Structured Courses)
+Mục tiêu: Học dài hạn, bài bản.
+
+CRUD Khóa học: Tutor tạo khóa học, giá tiền, mô tả.
+
+CRUD Giáo án (Syllabus): Tạo các buổi học (Session 1, Session 2...) trong khóa đó.
+
+Đăng ký học (Enrollment):
+
+Học viên bấm "Mua khóa học".
+
+Hệ thống gọi module Tài chính (GĐ2) để trừ tiền Học viên, giữ tiền ở hệ thống (chưa trả ngay cho Tutor).
+
+📹 GIAI ĐOẠN 5: TÍCH HỢP VIDEO CALL (Integration)
+Mục tiêu: Kết nối hình ảnh/âm thanh.
+
+Video Token Provider: Viết hàm Python sinh Token cho ZegoCloud hoặc Agora.
+
+API Get Room: Khi 2 người vào phiên học -> Gọi API lấy RoomID và Token để Frontend mở camera.
+
+⭐ GIAI ĐOẠN 6: ĐÁNH GIÁ & AN TOÀN (Trust & Safety)
+Review System: Học xong -> Rating 5 sao -> Lúc này hệ thống mới chuyển tiền tạm giữ cho Tutor.
+
+Reporting: Báo cáo vi phạm.

@@ -66,3 +66,38 @@ export async function UpdateUserSkillAction(
     };
   }
 }
+export async function DeleteUserSkillAction(token: string, id: string) {
+  try {
+    if (!token) {
+      return {
+        success: false,
+        error: "Token not found",
+      };
+    }
+
+    const res = await fetch(`${BeUrl}/user_skills/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!res.ok) {
+      const errData = await res.json();
+      throw new Error(errData.message || "Failed to delete user skill");
+    }
+
+    const result = await res.json();
+    revalidatePath("/");
+    return {
+      success: true,
+      data: result.data,
+      message: "Xóa kỹ năng thành công",
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      error: error.message || "Lỗi khi xóa kỹ năng",
+    };
+  }
+}

@@ -1,7 +1,6 @@
 import { Suspense } from "react";
 import AdminPage from "@/app/components/admin/admin_page";
 import UsersSection from "@/app/components/admin/wrappers/UsersSection";
-import ChallengesSection from "@/app/components/admin/wrappers/ChallengesSection";
 import Skeleton from "react-loading-skeleton";
 import CategoriesSection from "@/app/components/admin/wrappers/CategoriesSection";
 import DashBoardSection from "@/app/components/admin/wrappers/DashBoardSection";
@@ -28,8 +27,6 @@ async function AdminContentResolver({
     case "Users_Management":
       return <UsersSection />;
 
-    case "Challenges_Management":
-      return <ChallengesSection />;
     case "Categories_Management":
       return <CategoriesSection />;
     case "Skills_Management":

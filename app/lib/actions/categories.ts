@@ -221,3 +221,31 @@ export async function getSkillsByCategoryAction(categoryId: string) {
     };
   }
 }
+
+export async function loadMoreCategoriesAction(
+  page: number,
+  per_page: number,
+  search: string = "",
+  sort: string = "",
+) {
+  try {
+    const { SSR_Categories } = await import("@/app/lib/data/categories");
+    const { categories, pagination } = await SSR_Categories(
+      page,
+      per_page,
+      search,
+      sort,
+    );
+    return {
+      success: true,
+      data: categories,
+      pagination,
+    };
+  } catch (error: any) {
+    console.error("[loadMoreCategoriesAction] Error:", error.message);
+    return {
+      success: false,
+      error: error.message,
+    };
+  }
+}

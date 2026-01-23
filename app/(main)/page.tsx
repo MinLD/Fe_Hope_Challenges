@@ -1,18 +1,17 @@
-import Banner from "@/app/components/banner";
+import CategoriesFetcher from "@/app/components/fetcher_components/CategoriesFetcher";
+import HomePages from "@/app/components/home_page";
 import { Suspense } from "react";
-
-function BannerSkeleton() {
-  return (
-    <div className="h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-green-900 animate-pulse" />
-  );
-}
 
 export default async function Home() {
   return (
     <div className="min-h-screen">
-      <Suspense fallback={<BannerSkeleton />}>
-        <Banner />
-      </Suspense>
+      <HomePages
+        slots={
+          <Suspense fallback={<div>Loading...</div>}>
+            <CategoriesFetcher />
+          </Suspense>
+        }
+      />
     </div>
   );
 }

@@ -59,7 +59,7 @@ export const CreateSkill = ({
       setCreatingSkill(true);
 
       const formData = new FormData();
-      formData.append("skill_id", values.skill_id);
+      formData.append("skill_id", String(values.skill_id));
       formData.append("level", values.level);
       if (values.proof_link) {
         formData.append("proof_link", values.proof_link);
@@ -71,6 +71,7 @@ export const CreateSkill = ({
         formData.append("avatar", avatarFile);
       }
 
+      // Important: Pass FormData, not JSON object
       const res = await CreateUserSkillAction(formData, token || "");
 
       if (res.success) {

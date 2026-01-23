@@ -28,9 +28,13 @@ function MySlider({ children, className, swiperOptions }: Props) {
       clickable: true,
     },
     navigation: true,
-    slidesPerView: 2,
+    slidesPerView: 1,
     spaceBetween: 10,
     breakpoints: {
+      640: {
+        slidesPerView: 2,
+        spaceBetween: 20,
+      },
       768: {
         slidesPerView: 3,
         spaceBetween: 20,
@@ -43,7 +47,10 @@ function MySlider({ children, className, swiperOptions }: Props) {
   };
 
   return (
-    <div className={`container mx-auto py-8 ${className}`}>
+    <div
+      className={`container mx-auto py-8 ${className}`}
+      suppressHydrationWarning
+    >
       <Swiper
         {...defaultOptions}
         {...swiperOptions}

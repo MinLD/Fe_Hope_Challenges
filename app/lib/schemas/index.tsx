@@ -47,11 +47,11 @@ const SHCEMA_categories = z.object({
     .refine((file) => file, "Vui lòng chọn ảnh đại diện") // Bắt buộc chọn
     .refine(
       (file) => file?.size <= MAX_FILE_SIZE,
-      `Kích thước ảnh tối đa là 10MB.`
+      `Kích thước ảnh tối đa là 10MB.`,
     )
     .refine(
       (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
-      "Chỉ hỗ trợ định dạng .jpg, .jpeg, .png và .webp"
+      "Chỉ hỗ trợ định dạng .jpg, .jpeg, .png và .webp",
     ),
 });
 const SCHEMA_categories_update = SHCEMA_categories.partial();
@@ -73,20 +73,20 @@ const SCHEMA_skill = z.object({
     .refine((file) => file, "Vui lòng chọn ảnh đại diện") // Bắt buộc chọn
     .refine(
       (file) => file?.size <= MAX_FILE_SIZE,
-      `Kích thước ảnh tối đa là 10MB.`
+      `Kích thước ảnh tối đa là 10MB.`,
     )
     .refine(
       (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
-      "Chỉ hỗ trợ định dạng .jpg, .jpeg, .png và .webp"
+      "Chỉ hỗ trợ định dạng .jpg, .jpeg, .png và .webp",
     ),
 });
 const SCHEMA_skill_update = SCHEMA_skill.partial();
 const SHCHEMA_SkillUser = z.object({
-  category_id: z
-    .number({ required_error: "Vui lòng chọn danh mục" })
+  category_id: z.coerce
+    .string({ required_error: "Vui lòng chọn danh mục" })
     .min(1, "Vui lòng chọn danh mục"),
-  skill_id: z
-    .number({ required_error: "Vui lòng chọn kỹ năng" })
+  skill_id: z.coerce
+    .string({ required_error: "Vui lòng chọn kỹ năng" })
     .min(1, "Vui lòng chọn kỹ năng"),
   level: z.enum(["beginner", "intermediate", "advanced", "expert"], {
     required_error: "Vui lòng chọn trình độ",

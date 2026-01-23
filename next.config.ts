@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 const URL = "http://127.0.0.1:5000/api";
 const nextConfig: NextConfig = {
   reactCompiler: false,
-  cacheComponents: true,
+  cacheComponents: false,
   async headers() {
     return [
       {

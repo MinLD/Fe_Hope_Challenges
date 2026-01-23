@@ -1,8 +1,8 @@
-import { UpdateUserSkillAction } from "@/app/lib/actions/skills";
+import { DeleteUserSkillAction, UpdateUserSkillAction } from "@/app/lib/actions/skills";
 import { useAuth } from "@/app/lib/hooks/useAuth";
 import { I_skills_user } from "@/app/lib/types/categories";
-import { Button, Modal, Form, Input, Upload } from "antd";
-import { ExternalLink, Upload as UploadIcon } from "lucide-react";
+import { Button, Modal, Form, Input, Upload, Popconfirm } from "antd";
+import { ExternalLink, Upload as UploadIcon, Trash2 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 
@@ -18,24 +18,24 @@ export const UpdateSkill = ({
   skill,
 }: UpdateSkillProps) => {
   const [updatingSkill, setUpdatingSkill] = useState(false);
+  // State để kiểm tra form có thay đổi hay không
+  const [isChanged, setIsChanged] = useState(false);
+
   const { token } = useAuth();
   const [form] = Form.useForm();
 
-  console.log("DEBUG SKILL DATA:", skill);
   // Đổ dữ liệu cũ vào form khi mở modal
   useEffect(() => {
     if (isUpdateSkillModalOpen && skill) {
       form.setFieldsValue({
         proof_link: skill.proof_link,
-        // Avatar không thể set strict value cho Upload component của Antd dễ dàng nếu là URL từ server,
-        // nên ta để trống để người dùng upload mới.
         avatar: [],
       });
+      // Reset trạng thái thay đổi mỗi khi mở modal
+      setIsChanged(false);
     }
   }, [isUpdateSkillModalOpen, skill, form]);
 
-  // Hàm xử lý file upload của Ant Design
-  /* eslint-disable  @typescript-eslint/no-explicit-any */
   const normFile = (e: any) => {
     if (Array.isArray(e)) {
       return e;
@@ -45,33 +45,25 @@ export const UpdateSkill = ({
 
   const handleUpdateSkill = async () => {
     try {
-      // Validate các trường trong form
       const values = await form.validateFields();
       setUpdatingSkill(true);
 
       const formData = new FormData();
-
-      // Proof Link không bắt buộc, có thì gửi
       if (values.proof_link) {
         formData.append("proof_link", values.proof_link);
       }
-
-      // Avatar: Lấy file thực tế từ object của Antd
       const avatarFile = values.avatar?.[0]?.originFileObj;
       if (avatarFile) {
         formData.append("avatar", avatarFile);
       }
-      formData.forEach((value, key) => {
-        console.log(key, value);
-      });
-      // Gọi Server Action để cập nhật
+
       const res = await UpdateUserSkillAction(formData, token || "", skill.id);
-      console.log("res", res);
 
       if (res.success) {
         toast.success("Cập nhật kỹ năng thành công!");
         setIsUpdateSkillModalOpen(false);
         form.resetFields();
+        setIsChanged(false); // Reset lại sau khi update thành công
       } else {
         toast.error(String(res.error) || "Có lỗi xảy ra");
       }
@@ -82,22 +74,75 @@ export const UpdateSkill = ({
     }
   };
 
+  // Hàm xử lý xóa (Logic bạn tự viết sau)
+  const handleDeleteSkill = async () => {
+    console.log("Đang xóa kỹ năng ID:", skill.id);
+    try {
+      const res = await DeleteUserSkillAction(token || "", skill.id);
+      if (res.success) {
+        toast.success("Xóa kỹ năng thành công!");
+        setIsUpdateSkillModalOpen(false);
+        form.resetFields();
+        setIsChanged(false); // Reset lại sau khi update thành công
+      } else {
+        toast.error(String(res.error) || "Có lỗi xảy ra");
+      }
+    } catch (error) {
+      console.error("Submit Failed:", error);
+    }
+  };
+
+  const handleCancel = () => {
+    setIsUpdateSkillModalOpen(false);
+    form.resetFields();
+    setIsChanged(false);
+  };
+
   return (
     <Modal
       title="Cập nhật kỹ năng"
       open={isUpdateSkillModalOpen}
-      onCancel={() => {
-        setIsUpdateSkillModalOpen(false);
-        form.resetFields();
-      }}
-      onOk={handleUpdateSkill}
-      confirmLoading={updatingSkill}
+      onCancel={handleCancel}
       centered
-      okText="Cập nhật"
-      cancelText="Hủy bỏ"
+      // Tùy chỉnh Footer để thêm nút Xóa và disable nút Update
+      footer={
+        <div className="flex justify-between items-center w-full">
+          {/* Nút Xóa nằm bên trái */}
+          <Popconfirm
+            title="Xóa kỹ năng này?"
+            description="Hành động này không thể hoàn tác."
+            onConfirm={handleDeleteSkill}
+            okText="Xóa"
+            cancelText="Hủy"
+            okButtonProps={{ danger: true }}
+          >
+            <Button danger icon={<Trash2 size={16} />}>
+              Xóa
+            </Button>
+          </Popconfirm>
+
+          {/* Các nút hành động nằm bên phải */}
+          <div className="flex gap-2">
+            <Button onClick={handleCancel}>Hủy bỏ</Button>
+            <Button
+              type="primary"
+              onClick={handleUpdateSkill}
+              loading={updatingSkill}
+              disabled={!isChanged} // Disable nếu chưa có thay đổi
+            >
+              Cập nhật
+            </Button>
+          </div>
+        </div>
+      }
     >
-      <Form form={form} layout="vertical" className="mt-4">
-        {/* Trường Link Minh Chứng: Không bắt buộc */}
+      <Form
+        form={form}
+        layout="vertical"
+        className="mt-4"
+        // Sự kiện này kích hoạt khi bất kỳ field nào thay đổi
+        onValuesChange={() => setIsChanged(true)}
+      >
         <Form.Item
           label="Link minh chứng (Ảnh/Chứng chỉ)"
           name="proof_link"
@@ -110,7 +155,6 @@ export const UpdateSkill = ({
           />
         </Form.Item>
 
-        {/* Trường Avatar Input: Bắt buộc upload ảnh mới theo yêu cầu */}
         <Form.Item
           label="Ảnh minh chứng (Upload)"
           name="avatar"

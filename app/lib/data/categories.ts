@@ -1,14 +1,24 @@
 import { BeUrl } from "@/app/lib/services/api_client";
 
 // ✅ Next 16 Fix: Add return type for better type safety
-export async function SSR_Categories(page = 1, per_page = 5) {
+export async function SSR_Categories(
+  page = 1,
+  per_page = 5,
+  search = "",
+  sort = "",
+) {
   try {
-    const res = await fetch(
-      `${BeUrl}/categories?page=${page}&per_page=${per_page}`,
-      {
-        next: { revalidate: 60 },
-      }
-    );
+    const queryParams = new URLSearchParams({
+      page: page.toString(),
+      per_page: per_page.toString(),
+    });
+
+    if (search) queryParams.append("search", search);
+    if (sort) queryParams.append("sort", sort);
+
+    const res = await fetch(`${BeUrl}/categories?${queryParams.toString()}`, {
+      next: { revalidate: 60 },
+    });
 
     if (!res.ok) {
       throw new Error(`HTTP ${res.status}: ${res.statusText}`);
@@ -35,14 +45,14 @@ export async function SSR_Categories(page = 1, per_page = 5) {
 export async function SSR_All_SkillsByCategories(
   categoryId: string,
   page = 1,
-  per_page = 3
+  per_page = 3,
 ) {
   try {
     const res = await fetch(
       `${BeUrl}/categories/${categoryId}/skills?page=${page}&per_page=${per_page}`,
       {
         next: { revalidate: 60 },
-      }
+      },
     );
     if (!res.ok) {
       throw new Error(`HTTP ${res.status}: ${res.statusText}`);
