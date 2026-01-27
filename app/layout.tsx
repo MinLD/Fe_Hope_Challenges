@@ -13,6 +13,7 @@ import AntdProvider from "@/app/components/antd/AntdProvider";
 import { Suspense } from "react";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { ConfigProvider, theme } from "antd";
+import { SocketProvider } from "@/app/lib/context/SocketContext";
 
 export const metadata: Metadata = {
   title: "Skill Time",
@@ -53,14 +54,16 @@ export default async function RootLayout({
             >
               <SmoothLoadingWrapper />
               <AuthProvider>
-                <NavProvider>
-                  <Suspense>
-                    <AuthSSRInit />
-                  </Suspense>
-                  <AntdProvider>{children}</AntdProvider>
-                  <HamburgerMenu />
-                  <Toaster position="top-right" closeButton />
-                </NavProvider>
+                <SocketProvider>
+                  <NavProvider>
+                    <Suspense>
+                      <AuthSSRInit />
+                    </Suspense>
+                    <AntdProvider>{children}</AntdProvider>
+                    <HamburgerMenu />
+                    <Toaster position="top-right" closeButton />
+                  </NavProvider>
+                </SocketProvider>
               </AuthProvider>
             </GoogleOAuthProvider>
           </ConfigProvider>

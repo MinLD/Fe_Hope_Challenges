@@ -249,3 +249,22 @@ export async function loadMoreCategoriesAction(
     };
   }
 }
+
+export async function getAllCategoriesAction() {
+  try {
+    const { SSR_Categories } = await import("@/app/lib/data/categories");
+    // Fetch a large number to ensure we get most categories for the dropdown
+    const { categories } = await SSR_Categories(1, 100, "", "");
+    return {
+      success: true,
+      data: categories,
+    };
+  } catch (error: any) {
+    console.error("[getAllCategoriesAction] Error:", error.message);
+    return {
+      success: false,
+      data: [],
+      error: error.message,
+    };
+  }
+}
